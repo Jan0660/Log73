@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Log73": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

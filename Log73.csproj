@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Version>0.1.0</Version>
+    <Description>A powerful and customizable logging library for .NET</Description>
+    <Authors>Jan0660</Authors>
+    <Company>Jan0660</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Log73Testing\**" />
+    <EmbeddedResource Remove="Log73Testing\**" />
+    <None Remove="Log73Testing\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Colorful.Console" Version="1.2.15" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="YamlDotNet" Version="9.1.0" />
+  </ItemGroup>
+
+</Project>

@@ -70,13 +70,15 @@ namespace Log73
         public XmlWriterSettings XmlWriterSettings = new() { Indent = true };
 
         public ConsoleStyleOptions Style = new();
+
+        public bool AlwaysLogTaskStart = false;
     }
 
     public class ConsoleStyleOptions
     {
         public ConsoleStyleOption Info = new() { Color = Color.Cyan };
         public ConsoleStyleOption Warn = new() { Color = Color.Yellow };
-        public ConsoleStyleOption Error = new() { Color = Color.Red, Bold = true };
+        public ConsoleStyleOption Error = new() { Color = Color.Red };
         public ConsoleStyleOption Debug = new() { Color = Color.White };
         /// <summary>
         /// if you want to put a space after message type

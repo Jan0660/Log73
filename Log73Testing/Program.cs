@@ -11,39 +11,45 @@ namespace Log73Testing
         static async Task Main(string[] args)
         {
             Console.Options.LogLevel = LogLevel.Debug;
-            MessageTypes.Error.ExtraInfo.Add(new TimeExtraInfo());
-            Console.Options.Style.Error.Bold = true;
-            Console.Options.Style.Error.Italic = true;
-            Console.Options.Style.Error.Underline = true;
-            Console.Options.Style.Error.Invert = true;
-            Console.Options.Style.Error.CrossedOut = true;
-            Console.Options.Style.Error.SlowBlink = true;
-            Console.Error("the");
-            Console.Options.Style.Error.Bold = false;
-            Console.Options.Style.Error.Italic = false;
-            Console.Options.Style.Error.Underline = false;
-            Console.Error("not bold");
-            Console.WriteLine("Hello Log73!");
-            Console.Info("Info");
-            Console.Warn("Warn");
-            Console.Error("Error");
-            Console.Debug("Debug");
-            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.Json;
-            Console.Info("Object serialization as default");
-            Console.Info(new DummyObject());
-            Console.Info("Object serialization as JSON");
-            Console.ObjectJson(new DummyObject());
-            Console.Info("Object serialization as XML");
-            Console.ObjectXml(new DummyObject());
-            Console.Info("Object serialization as YAML");
-            Console.ObjectYaml(new DummyObject());
-            Console.Task("TestErrorTask", TestErrorTask());
+            //Console.Log("You can");
+            ////MessageTypes.Error.Style.Invert = true;
+            ////MessageTypes.Error.ExtraInfo.Add(new TimeExtraInfo());
+            //Console.Error("log customized messages");
+            //Console.Warn("with Log73!");
+            //Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
+            //Console.Info("Info");
+            //Console.Warn("Warn");
+            //Console.Error("Error");
+            //Console.Debug("Debug");
+
+            //Console.Error("No styles :(");
+            //MessageTypes.Error.Style.Invert = true;
+            //MessageTypes.Error.ContentStyle.Color = System.Drawing.Color.Orange;
+            //MessageTypes.Error.ContentStyle.Italic = true;
+            //MessageTypes.Error.ContentStyle.Underline = true;
+            //Console.Error("Look at all this styling!");
+
+            //Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.Json;
+            //Console.Info("Object serialization as default");
+            //Console.Info(new DummyObject());
+            //Console.Info("Object serialization as JSON");
+            //Console.ObjectJson(new DummyObject());
+            //Console.Info("Object serialization as XML");
+            //Console.ObjectXml(new DummyObject());
+            //Console.Info("Object serialization as YAML");
+            //Console.ObjectYaml(new DummyObject());
+            //Console.Task("TestErrorTask", TestErrorTask());
+            //Console.Task("TestSuccessTask", TestSuccessTask());
+            //12.Dump();
+            Console.Options.AlwaysLogTaskStart = true;
+            MessageTypes.Start.Name = "Begin";
+            MessageTypes.Done.Name = "Finished";
             Console.Task("TestSuccessTask", TestSuccessTask());
-            12.Dump();
+            Console.Task("TestErrorTask", TestErrorTask());
             await Task.Delay(2000);
         }
 
-        static async Task TestErrorTask() => throw new Exception("bruh");
+        static async Task TestErrorTask() => throw new Exception("exception message");
         static async Task TestSuccessTask() => await Task.Delay(1000);
 
         public class DummyObject

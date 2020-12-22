@@ -66,8 +66,11 @@ namespace Log73
             var stopwatch = Stopwatch.StartNew();
             try
             {
+                if (Options.AlwaysLogTaskStart)
+                    Log(MessageTypes.Start, $"{name}");
                 task.Start();
-                Log(MessageTypes.Start, $"{name}");
+                if(!Options.AlwaysLogTaskStart)
+                    Log(MessageTypes.Start, $"{name}");
             }
             catch { }
             task.ContinueWith((task, state) =>

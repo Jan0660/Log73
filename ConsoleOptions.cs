@@ -14,6 +14,48 @@ namespace Log73
 
         public LogLevel LogLevel = LogLevel.Standard;
 
+        public LogType DumpLogType = LogType.Info;
+        [Flags]
+        public enum ObjectSerializationMethod
+        {
+            /// <summary>
+            /// Always uses .ToString(), even if it is not overriden
+            /// </summary>
+            AlwaysToString = 0,
+            /// <summary>
+            /// Uses .ToString() if it is overriden
+            /// </summary>
+            OverridenToString = 1,
+            /// <summary>
+            /// Always uses Json
+            /// </summary>
+            AlwaysJson = 2,
+            /// <summary>
+            /// Uses .ToString() if it is overriden, otherwise uses Json
+            /// </summary>
+            Json = 3,
+            /// <summary>
+            /// Always uses Xml
+            /// </summary>
+            AlwaysXml = 4,
+            /// <summary>
+            /// Uses .ToString() if it is overriden, otherwise uses Xml
+            /// </summary>
+            Xml = 5,
+            /// <summary>
+            /// Always uses Yaml
+            /// </summary>
+            AlwaysYaml = 8,
+            /// <summary>
+            /// Uses .ToString() if it is overriden, otherwise uses Yaml
+            /// </summary>
+            Yaml = 9
+        }
+        /// <summary>
+        /// The method of object serialization to use when logging a non-value type
+        /// </summary>
+        public ObjectSerializationMethod ObjectSerialization = ObjectSerializationMethod.AlwaysToString;
+
         public bool UseBrackets = true;
 
         public bool SpaceAfterInfo = true;

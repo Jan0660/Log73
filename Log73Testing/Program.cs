@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Console = Log73.Console;
 using Out = System.Console;
 using Log73;
+using Log73.ExtensionMethod;
 namespace Log73Testing
 {
     public class Program
@@ -27,6 +28,9 @@ namespace Log73Testing
             Console.Warn("Warn");
             Console.Error("Error");
             Console.Debug("Debug");
+            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.Json;
+            Console.Info("Object serialization as default");
+            Console.Info(new DummyObject());
             Console.Info("Object serialization as JSON");
             Console.ObjectJson(new DummyObject());
             Console.Info("Object serialization as XML");
@@ -35,6 +39,7 @@ namespace Log73Testing
             Console.ObjectYaml(new DummyObject());
             Console.Task("TestErrorTask", TestErrorTask());
             Console.Task("TestSuccessTask", TestSuccessTask());
+            12.Dump();
             await Task.Delay(2000);
         }
 
@@ -45,6 +50,9 @@ namespace Log73Testing
         {
             public string DummyText = "Hello Log73!";
             public int Number = 73;
+
+            public override string ToString()
+                => "Hello!";
         }
     }
 }

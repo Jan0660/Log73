@@ -1,6 +1,7 @@
 ﻿using System;
 using Out = System.Console;
 using ColorOut = Colorful.Console;
+using OSM = Log73.ConsoleOptions.ObjectSerializationMethod;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Threading;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
+using Log73.ExtensionMethod;
 
 namespace Log73
 {
@@ -37,10 +39,7 @@ namespace Log73
         public static void ObjectJson(LogType logType, object obj)
             => ObjectJson(MessageTypes.Get(logType), obj);
         public static void ObjectJson(MessageType msgType, object obj)
-        {
-            var json = JsonConvert.SerializeObject(obj, Options.JsonSerializerSettings);
-            Log(msgType, json);
-        }
+            => Log(msgType, obj.SerializeAsJson());
         public static void ObjectXml(object obj)
             => ObjectXml(MessageTypes.Info, obj);
         public static void ObjectXml(LogType logType, object obj)
@@ -50,18 +49,7 @@ namespace Log73
         /// </summary>
         /// <param name="obj"></param>
         public static void ObjectXml(MessageType msgType, object obj)
-        {
-            // stolen from https://stackoverflow.com/a/16853268/12520276
-            string xml = "";
-            var xmlserializer = new XmlSerializer(obj.GetType());
-            var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter, Options.XmlWriterSettings))
-            {
-                xmlserializer.Serialize(writer, obj);
-                xml = stringWriter.ToString();
-            }
-            Log(msgType, xml);
-        }
+            => Log(msgType, obj.SerializeAsXml());
         public static void ObjectYaml(object obj)
             => ObjectYaml(MessageTypes.Info, obj);
         public static void ObjectYaml(LogType logType, object obj)
@@ -69,8 +57,7 @@ namespace Log73
 
         public static void ObjectYaml(MessageType msgType, object obj)
         {
-            var serializer = new YamlDotNet.Serialization.Serializer();
-            Log(msgType, serializer.Serialize(obj));
+            Log(msgType, obj.SerializeAsYaml());
         }
 
         public static void Task(string name, Task task)
@@ -141,14 +128,14 @@ namespace Log73
             _writeInfo($"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}", msgType.Style);
             foreach (var extra in msgType.ExtraInfo)
             {
-               _writeInfo(extra.GetValue(), extra.Style);
+                _writeInfo(extra.GetValue(), extra.Style);
             }
-            if (value.GetType() == typeof(string))
-                value = ((string)value).Replace("{", "{{").Replace("}", "}}");
-            WriteStyle($"{value}\n", msgType.ContentStyle);
+            //if (value.GetType() == typeof(string))
+            //    value = ((string)value).Replace("{", "{{").Replace("}", "}}");
+            _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle);
         }
 
-        public static void WriteStyle(object value, ConsoleStyleOption style)
+        public static void _writeStyle(object value, ConsoleStyleOption style)
         {
             var str = value.ToString();
             if (style.Bold)
@@ -176,7 +163,7 @@ namespace Log73
         private static void _writeInfo(object value, ConsoleStyleOption style)
         {
             var str = Options.UseBrackets ? $"[{value}]" : $"{value}";
-            WriteStyle(str, style);
+            _writeStyle(str, style);
             if (Options.SpaceAfterInfo)
                 Out.Write(" ");
         }
@@ -213,5 +200,38 @@ namespace Log73
         public static (int, int) GetCursorPosition()
             => (Out.CursorLeft, Out.CursorTop);
         #endregion
+
+        private static string Serialize(this object obj)
+        {
+            if (obj.IsValueType())
+            {
+                return obj.ToString();
+            }
+            else
+            {
+                if ((int)Options.ObjectSerialization % (int)2 == 1)
+                {
+                    // check if ToString is overriden
+                    // todo: probly not best way of doing this
+                    if (obj.ToString() != obj.GetType().ToString())
+                    {
+                        // ToString is overriden
+                        return obj.ToString();
+                    }
+                }
+                return Options.ObjectSerialization switch
+                {
+                    OSM.AlwaysToString=> obj.ToString(),
+                    OSM.Json => obj.SerializeAsJson(),
+                    OSM.AlwaysJson => obj.SerializeAsJson(),
+                    OSM.Xml => obj.SerializeAsXml(),
+                    OSM.AlwaysXml => obj.SerializeAsXml(),
+                    OSM.Yaml => obj.SerializeAsYaml(),
+                    OSM.AlwaysYaml => obj.SerializeAsYaml(),
+                    _ => throw new Exception("invalid Options.ObjectSerialization")
+                };
+                throw new Exception("invalid Options.ObjectSerialization");
+            }
+        }
     }
 }

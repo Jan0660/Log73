@@ -11,6 +11,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 using Log73.ExtensionMethod;
+using System.Diagnostics;
 
 namespace Log73
 {
@@ -62,10 +63,11 @@ namespace Log73
 
         public static void Task(string name, Task task)
         {
-            Log(MessageTypes.Info, $"Starting Task {name}!");
+            var stopwatch = Stopwatch.StartNew();
             try
             {
                 task.Start();
+                Log(MessageTypes.Start, $"{name}");
             }
             catch { }
             task.ContinueWith((task, state) =>
@@ -76,7 +78,7 @@ namespace Log73
                     Exception(task.Exception);
                 }
                 else
-                    Log(MessageTypes.Info, $"Finished Task {name}!");
+                    Log(MessageTypes.Done, $"{name} in {stopwatch.ElapsedMilliseconds}ms");
             }, null);
         }
 
@@ -128,7 +130,7 @@ namespace Log73
             _writeInfo($"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}", msgType.Style);
             foreach (var extra in msgType.ExtraInfo)
             {
-                _writeInfo(extra.GetValue(), extra.Style);
+                _writeInfo(extra.GetValue(new ExtraInfoContext { Value = value, MessageType = msgType }), extra.Style);
             }
             //if (value.GetType() == typeof(string))
             //    value = ((string)value).Replace("{", "{{").Replace("}", "}}");
@@ -221,7 +223,7 @@ namespace Log73
                 }
                 return Options.ObjectSerialization switch
                 {
-                    OSM.AlwaysToString=> obj.ToString(),
+                    OSM.AlwaysToString => obj.ToString(),
                     OSM.Json => obj.SerializeAsJson(),
                     OSM.AlwaysJson => obj.SerializeAsJson(),
                     OSM.Xml => obj.SerializeAsXml(),

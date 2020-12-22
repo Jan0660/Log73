@@ -14,6 +14,18 @@ namespace Log73
             Name = "Info",
             Style = Styles.Info
         };
+        public static MessageType Start = new()
+        {
+            LogType = LogType.Info,
+            Name = "Start",
+            Style = Styles.Info
+        };
+        public static MessageType Done = new()
+        {
+            LogType = LogType.Info,
+            Name = "Done",
+            Style = new() { Color = Color.Lime }
+        };
         public static MessageType Warn = new()
         {
             LogType = LogType.Warn,

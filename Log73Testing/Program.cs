@@ -44,7 +44,7 @@ namespace Log73Testing
         }
 
         static async Task TestErrorTask() => throw new Exception("bruh");
-        static async Task TestSuccessTask() => Task.Delay(1000);
+        static async Task TestSuccessTask() => await Task.Delay(1000);
 
         public class DummyObject
         {

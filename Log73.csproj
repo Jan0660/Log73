@@ -5,7 +5,7 @@
     <LangVersion>9.0</LangVersion>
     <Version>0.1.0</Version>
     <Description>A powerful and customizable logging library for .NET</Description>
-    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Jan0660</Authors>
     <Company>Jan0660</Company>
     <PackageTags>logging console log73</PackageTags>

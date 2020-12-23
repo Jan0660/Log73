@@ -16,43 +16,65 @@ using System.Diagnostics;
 namespace Log73
 {
     [Flags]
-    public enum LogType { Info = 1, Warn = 2, Error = 4, Debug = 8 }
+    public enum LogType
+    {
+        Info = 1,
+        Warn = 2,
+        Error = 4,
+        Debug = 8
+    }
+
     public static class Console
     {
         private static bool _lock = false;
         private static List<(MessageType msgType, object value)> _logQueue = new();
+        private static TextWriter StdOut => System.Console.Out;
 
         public static ConsoleOptions Options = new ConsoleOptions();
+
         public static void WriteLine(object value)
             => Log(Options.WriteLogType, value);
+
         public static void Write(object value)
             => Log(Options.WriteLogType, value);
+
         public static void Info(object value)
             => Log(LogType.Info, value);
+
         public static void Warn(object value)
-           => Log(LogType.Warn, value);
+            => Log(LogType.Warn, value);
+
         public static void Error(object value)
-           => Log(LogType.Error, value);
+            => Log(LogType.Error, value);
+
         public static void Debug(object value)
-           => Log(LogType.Debug, value);
+            => Log(LogType.Debug, value);
+
         public static void ObjectJson(object obj)
             => ObjectJson(MessageTypes.Info, obj);
+
         public static void ObjectJson(LogType logType, object obj)
             => ObjectJson(MessageTypes.Get(logType), obj);
+
         public static void ObjectJson(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsJson());
+
         public static void ObjectXml(object obj)
             => ObjectXml(MessageTypes.Info, obj);
+
         public static void ObjectXml(LogType logType, object obj)
             => ObjectXml(MessageTypes.Get(logType), obj);
+
         /// <summary>
         /// only works with public types
         /// </summary>
         /// <param name="obj"></param>
         public static void ObjectXml(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsXml());
+
         public static void ObjectYaml(object obj)
             => ObjectYaml(MessageTypes.Info, obj);
+
         public static void ObjectYaml(LogType logType, object obj)
             => ObjectYaml(MessageTypes.Get(logType), obj);
 
@@ -69,10 +91,13 @@ namespace Log73
                 if (Options.AlwaysLogTaskStart)
                     Log(MessageTypes.Start, $"{name}");
                 task.Start();
-                if(!Options.AlwaysLogTaskStart)
+                if (!Options.AlwaysLogTaskStart)
                     Log(MessageTypes.Start, $"{name}");
             }
-            catch { }
+            catch
+            {
+            }
+
             task.ContinueWith((task, state) =>
             {
                 if (task.IsFaulted)
@@ -98,6 +123,7 @@ namespace Log73
                 _logQueue.Add((msgType, value));
                 return;
             }
+
             _lock = true;
             _log(msgType, value);
             // handle the messages in log queue
@@ -128,13 +154,14 @@ namespace Log73
             if (Options.LogLevel == LogLevel.Quiet && (
                 msgType.LogType == LogType.Info ||
                 msgType.LogType == LogType.Warn
-                ))
+            ))
                 return;
             _writeInfo($"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}", msgType.Style);
             foreach (var extra in msgType.ExtraInfo)
             {
-                _writeInfo(extra.GetValue(new ExtraInfoContext { Value = value, MessageType = msgType }), extra.Style);
+                _writeInfo(extra.GetValue(new ExtraInfoContext {Value = value, MessageType = msgType}), extra.Style);
             }
+
             //if (value.GetType() == typeof(string))
             //    value = ((string)value).Replace("{", "{{").Replace("}", "}}");
             _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle);
@@ -159,10 +186,7 @@ namespace Log73
                 str = Ansi.RapidBlink + str + Ansi.BlinkOff;
             if (style.Faint)
                 str = Ansi.Faint + str + Ansi.NormalColor;
-            if (style.Color != null)
-                ColorOut.Write(str, style.Color.Value);
-            else
-                Out.Write(str);
+            StdOut.Write(Ansi.ApplyColor(str, style.Color, style.BackgroundColor));
         }
 
         private static void _writeInfo(object value, ConsoleStyleOption style)
@@ -180,30 +204,43 @@ namespace Log73
         }
 
         #region System.Console compatibility
+
         public static void Beep()
             => Out.Beep();
+
         public static void Beep(int frequency, int duration)
             => Out.Beep(frequency, duration);
+
         public static void Clear()
             => Out.Clear();
+
         public static void SetWindowSize(int width, int height)
             => Out.SetWindowSize(width, height);
+
         public static void SetCursorPosition(int left, int top)
             => Out.SetCursorPosition(left, top);
+
         public static void SetBufferSize(int width, int height)
             => Out.SetBufferSize(width, height);
+
         public static void ResetColor()
             => Out.ResetColor();
+
         public static int Read()
             => Out.Read();
+
         public static string ReadLine()
             => Out.ReadLine();
+
         public static ConsoleKeyInfo ReadKey()
             => Out.ReadKey();
+
         public static ConsoleKeyInfo ReadKey(bool intercept)
             => Out.ReadKey(intercept);
+
         public static (int, int) GetCursorPosition()
             => (Out.CursorLeft, Out.CursorTop);
+
         #endregion
 
         private static string Serialize(this object obj)
@@ -214,7 +251,7 @@ namespace Log73
             }
             else
             {
-                if ((int)Options.ObjectSerialization % (int)2 == 1)
+                if ((int) Options.ObjectSerialization % (int) 2 == 1)
                 {
                     // check if ToString is overriden
                     // todo: probly not best way of doing this
@@ -224,6 +261,7 @@ namespace Log73
                         return obj.ToString();
                     }
                 }
+
                 return Options.ObjectSerialization switch
                 {
                     OSM.AlwaysToString => obj.ToString(),

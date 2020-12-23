@@ -97,6 +97,7 @@ namespace Log73
     public class ConsoleStyleOption
     {
         public Color? Color;
+        public Color? BackgroundColor;
         public bool Bold;
         public bool Italic;
         public bool Underline;

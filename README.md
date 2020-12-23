@@ -22,6 +22,7 @@ Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
 ## LogTypes
 
 There are 4 LogTypes: Info, Warn, Error, Debug. Which look like this by default:
+
 ![conhost](https://i.imgur.com/ynya3z8.png)
 
 ## Styling

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using Console = Log73.Console;
 using Out = System.Console;
@@ -20,9 +21,11 @@ namespace Log73Testing
             //Console.Info("Info");
             //Console.Warn("Warn");
             //Console.Error("Error");
+            MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
             MessageTypes.Debug.ExtraInfo.Add(new CallingMethodExtraInfo());
             MessageTypes.Debug.ExtraInfo.Add(new ThreadExtraInfo());
             MessageTypes.Debug.ExtraInfo.Add(new CallingModuleExtraInfo());
+            MessageTypes.Debug.ExtraInfo.Add(new TypeExtraInfo());
             MessageTypes.Debug.ExtraInfo.Add(new CallingClassExtraInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
             Console.Debug("Debug");
             SomeOtherMethod();

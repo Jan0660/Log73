@@ -20,8 +20,12 @@ namespace Log73Testing
             //Console.Info("Info");
             //Console.Warn("Warn");
             //Console.Error("Error");
-            //Console.Debug("Debug");
-
+            MessageTypes.Debug.ExtraInfo.Add(new CallingMethodExtraInfo());
+            MessageTypes.Debug.ExtraInfo.Add(new ThreadExtraInfo());
+            MessageTypes.Debug.ExtraInfo.Add(new CallingModuleExtraInfo());
+            MessageTypes.Debug.ExtraInfo.Add(new CallingClassExtraInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
+            Console.Debug("Debug");
+            SomeOtherMethod();
             //Console.Error("No styles :(");
             //MessageTypes.Error.Style.Invert = true;
             //MessageTypes.Error.ContentStyle.Color = System.Drawing.Color.Orange;
@@ -60,5 +64,8 @@ namespace Log73Testing
             public override string ToString()
                 => "Hello!";
         }
+
+        public static void SomeOtherMethod()
+            => "Hello".DumpDebug();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Out = System.Console;
-using ColorOut = Colorful.Console;
 using OSM = Log73.ConsoleOptions.ObjectSerializationMethod;
 using System.Drawing;
 using System.Threading.Tasks;

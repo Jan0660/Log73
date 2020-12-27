@@ -10,6 +10,7 @@
     <Company>Jan0660</Company>
     <PackageTags>logging console log73</PackageTags>
     <RepositoryUrl>https://github.com/Jan0660/Log73</RepositoryUrl>
+    <PackageVersion>0.3.0-preview1</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Colorful.Console" Version="1.2.15" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="YamlDotNet" Version="9.1.0" />
   </ItemGroup>

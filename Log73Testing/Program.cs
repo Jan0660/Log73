@@ -14,7 +14,7 @@ namespace Log73Testing
             Console.Options.LogLevel = LogLevel.Debug;
             //Console.Log("You can");
             ////MessageTypes.Error.Style.Invert = true;
-            ////MessageTypes.Error.ExtraInfo.Add(new TimeExtraInfo());
+            ////MessageTypes.Error.LogInfo.Add(new TimeLogInfo());
             //Console.Error("log customized messages");
             //Console.Warn("with Log73!");
             //Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
@@ -22,11 +22,11 @@ namespace Log73Testing
             //Console.Warn("Warn");
             //Console.Error("Error");
             MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
-            MessageTypes.Debug.ExtraInfo.Add(new CallingMethodExtraInfo());
-            MessageTypes.Debug.ExtraInfo.Add(new ThreadExtraInfo());
-            MessageTypes.Debug.ExtraInfo.Add(new CallingModuleExtraInfo());
-            MessageTypes.Debug.ExtraInfo.Add(new TypeExtraInfo());
-            MessageTypes.Debug.ExtraInfo.Add(new CallingClassExtraInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
+            MessageTypes.Debug.LogInfos.Add(new CallingMethodLogInfo());
+            MessageTypes.Debug.LogInfos.Add(new ThreadLogInfo());
+            MessageTypes.Debug.LogInfos.Add(new CallingModuleLogInfo());
+            MessageTypes.Debug.LogInfos.Add(new TypeLogInfo());
+            MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
             Console.Debug("Debug");
             SomeOtherMethod();
             //Console.Error("No styles :(");

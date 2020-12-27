@@ -157,9 +157,9 @@ namespace Log73
             ))
                 return;
             _writeInfo($"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}", msgType.Style);
-            foreach (var extra in msgType.ExtraInfo)
+            foreach (var extra in msgType.LogInfos)
             {
-                _writeInfo(extra.GetValue(new ExtraInfoContext {Value = value, MessageType = msgType}), extra.Style);
+                _writeInfo(extra.GetValue(new LogInfoContext {Value = value, MessageType = msgType}), extra.Style);
             }
 
             //if (value.GetType() == typeof(string))

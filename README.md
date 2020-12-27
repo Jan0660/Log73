@@ -1,5 +1,6 @@
 # Log73
-
+[![NuGet](http://img.shields.io/nuget/v/Log73)](https://www.nuget.org/packages/Log73/)
+[![Prerelease](http://img.shields.io/nuget/vpre/Log73)](https://www.nuget.org/packages/Log73/)
 #### A powerful and customizable .NET logging library
 
 ## Basic example
@@ -11,7 +12,7 @@ using Log73;
 Console.Options.LogLevel = LogLevel.Debug;
 Console.Log("You can");
 MessageTypes.Error.Style.Invert = true;
-MessageTypes.Error.ExtraInfo.Add(new TimeExtraInfo());
+MessageTypes.Error.LogInfos.Add(new TimeExtraInfo());
 Console.Error("log customized messages");
 Console.Warn("with Log73!");
 Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });

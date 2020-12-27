@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -8,33 +8,20 @@ using System.Reflection;
 
 namespace Log73
 {
-    public interface IExtraInfo
-    {
-        public ConsoleStyleOption Style { get; set; }
-        public string GetValue(ExtraInfoContext context);
-    }
 
-    public class ExtraInfoContext
-    {
-        public object Value { get; internal set; }
-        public MessageType MessageType { get; internal set; }
-
-        internal ExtraInfoContext() { }
-    }
-
-    public class TimeExtraInfo : IExtraInfo
+    public class TimeLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.Magenta };
 
-        public string GetValue(ExtraInfoContext context)
+        public string GetValue(LogInfoContext context)
             => $"{DateTime.Now:hh:mm:ss}";
     }
-    public class CallingMethodExtraInfo : IExtraInfo
+    public class CallingMethodLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = true;
 
-        public string GetValue(ExtraInfoContext context)
+        public string GetValue(LogInfoContext context)
         {
             var frame = GetCallerFrame();
             return FullName ? frame.GetMethod().DeclaringType.FullName + "." + frame.GetMethod().Name : frame.GetMethod().Name;
@@ -59,34 +46,34 @@ namespace Log73
             throw new Exception("failed to get caller frame");
         }
     }
-    public class CallingClassExtraInfo : IExtraInfo
+    public class CallingClassLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = true;
 
-        public string GetValue(ExtraInfoContext context)
+        public string GetValue(LogInfoContext context)
         {
-            var frame = CallingMethodExtraInfo.GetCallerFrame();
+            var frame = CallingMethodLogInfo.GetCallerFrame();
             return FullName ? frame.GetMethod().DeclaringType.FullName : frame.GetMethod().DeclaringType.Name;
         }
     }
-    public class CallingModuleExtraInfo : IExtraInfo
+    public class CallingModuleLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = false;
 
-        public string GetValue(ExtraInfoContext context)
+        public string GetValue(LogInfoContext context)
         {
-            var frame = CallingMethodExtraInfo.GetCallerFrame();
+            var frame = CallingMethodLogInfo.GetCallerFrame();
             return FullName ? frame.GetMethod().Module.FullyQualifiedName : frame.GetMethod().Module.Name;
         }
     }
-    public class ThreadExtraInfo : IExtraInfo
+    public class ThreadLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool Attributes = true;
 
-        public string GetValue(ExtraInfoContext context)
+        public string GetValue(LogInfoContext context)
         {
             var thread = Thread.CurrentThread;
             var str = thread.Name == null ? "Unnamed" : thread.Name;
@@ -99,12 +86,12 @@ namespace Log73
             return str;
         }
     }
-    public class TypeExtraInfo : IExtraInfo
+    public class TypeLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = true;
 
-        public string GetValue(ExtraInfoContext context)
+        public string GetValue(LogInfoContext context)
         {
             var type = context.Value.GetType();
             return FullName ? type.FullName : type.Name;

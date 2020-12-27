@@ -60,11 +60,10 @@ namespace Log73
         public LogType LogType;
         public string Name;
         public ConsoleStyleOption Style = new();
-        public List<IExtraInfo> ExtraInfo = new();
+        public List<ILogInfo> LogInfos = new();
         /// <summary>
-        /// The color to be used for the content of the message
+        /// The style to be used for the content of the message
         /// </summary>
         public ConsoleStyleOption ContentStyle = new();
-        public Color? ContentColor => null;
     }
 }

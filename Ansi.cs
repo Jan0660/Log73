@@ -49,7 +49,7 @@ namespace Log73
             return str;
         }
 
-        internal static Color BestMatch(Color input, IColorScheme colorScheme)
+        public static Color BestMatch(Color input, IColorScheme colorScheme)
         {
             Color[] colors = new[]
             {
@@ -98,7 +98,7 @@ namespace Log73
             return BestMatch;
         }
 
-        internal static ConsoleColor ColorToConsoleColor(Color color, IColorScheme colorScheme)
+        public static ConsoleColor ColorToConsoleColor(Color color, IColorScheme colorScheme)
         {
             if (color == colorScheme.Black)
                 return ConsoleColor.Black;

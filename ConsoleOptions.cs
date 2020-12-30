@@ -11,7 +11,7 @@ namespace Log73
     public enum LogLevel { Quiet, Standard, Debug }
     public class ConsoleOptions
     {
-        public LogType WriteLogType = LogType.Info;
+        public MessageType WriteMessageType = MessageTypes.Info;
 
         public LogLevel LogLevel = LogLevel.Standard;
 

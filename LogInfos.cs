@@ -8,32 +8,53 @@ using System.Reflection;
 
 namespace Log73
 {
-
     public class TimeLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.Magenta };
+        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.Magenta};
+
+        public string TimeFormat = "hh:mm:ss";
+
+        public TimeLogInfo()
+        {
+        }
+
+        public TimeLogInfo(string timeFormat)
+        {
+            TimeFormat = timeFormat;
+        }
 
         public string GetValue(LogInfoContext context)
-            => $"{DateTime.Now:hh:mm:ss}";
+            => $"{DateTime.Now:TimeFormat}";
     }
+
     public class CallingMethodLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = true;
 
         public string GetValue(LogInfoContext context)
         {
-            var frame = GetCallerFrame();
-            return FullName ? frame.GetMethod().DeclaringType.FullName + "." + frame.GetMethod().Name : frame.GetMethod().Name;
+            try
+            {
+                var frame = GetCallerFrame();
+                return FullName
+                    ? frame.GetMethod().DeclaringType.FullName + "." + frame.GetMethod().Name
+                    : frame.GetMethod().Name;
+            }
+            catch
+            {
+                return "ERROR";
+            }
         }
 
         public static StackFrame GetCallerFrame()
         {
             var h = new StackTrace();
             var frames = h.GetFrames();
+            var log73 = typeof(Console).Assembly;
             foreach (var frame in frames)
             {
-                if (frame.GetMethod().DeclaringType.Assembly != Assembly.GetExecutingAssembly())
+                if (frame.GetMethod().DeclaringType.Assembly != log73)
                 {
                     var ass = frame.GetMethod().DeclaringType.Assembly;
                     if (frame.GetMethod().Module.Name == "System.Private.CoreLib.dll")
@@ -43,34 +64,52 @@ namespace Log73
                     return frame;
                 }
             }
+
             throw new Exception("failed to get caller frame");
         }
     }
+
     public class CallingClassLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = true;
 
         public string GetValue(LogInfoContext context)
         {
-            var frame = CallingMethodLogInfo.GetCallerFrame();
-            return FullName ? frame.GetMethod().DeclaringType.FullName : frame.GetMethod().DeclaringType.Name;
+            try
+            {
+                var frame = CallingMethodLogInfo.GetCallerFrame();
+                return FullName ? frame.GetMethod().DeclaringType.FullName : frame.GetMethod().DeclaringType.Name;
+            }
+            catch
+            {
+                return "ERROR";
+            }
         }
     }
+
     public class CallingModuleLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = false;
 
         public string GetValue(LogInfoContext context)
         {
-            var frame = CallingMethodLogInfo.GetCallerFrame();
-            return FullName ? frame.GetMethod().Module.FullyQualifiedName : frame.GetMethod().Module.Name;
+            try
+            {
+                var frame = CallingMethodLogInfo.GetCallerFrame();
+                return FullName ? frame.GetMethod().Module.FullyQualifiedName : frame.GetMethod().Module.Name;
+            }
+            catch
+            {
+                return "ERROR";
+            }
         }
     }
+
     public class ThreadLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool Attributes = true;
 
         public string GetValue(LogInfoContext context)
@@ -83,12 +122,14 @@ namespace Log73
                 if (thread.IsBackground) str += 'B';
                 if (thread.IsThreadPoolThread) str += 'P';
             }
+
             return str;
         }
     }
+
     public class TypeLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = true;
 
         public string GetValue(LogInfoContext context)

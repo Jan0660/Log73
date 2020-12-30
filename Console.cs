@@ -32,7 +32,7 @@ namespace Log73
         public static ConsoleOptions Options = new ConsoleOptions();
 
         public static void WriteLine(object value)
-            => Log(Options.WriteMessageType, value);
+            => Log(MessageTypes.Info, value);
 
         public static void Write(object value)
             => StdOut.Write(value.Serialize());

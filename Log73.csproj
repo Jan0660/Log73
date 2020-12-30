@@ -3,14 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <Version>0.3.0-preview3</Version>
+    <Version>0.3.0-preview3.1</Version>
     <Description>A powerful and customizable logging library for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Jan0660</Authors>
     <Company>Jan0660</Company>
     <PackageTags>logging console log73 log</PackageTags>
     <RepositoryUrl>https://github.com/Jan0660/Log73</RepositoryUrl>
-    <PackageVersion>0.3.0-preview3</PackageVersion>
+    <PackageVersion>0.3.0-preview3.1</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

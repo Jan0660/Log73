@@ -20,6 +20,8 @@ namespace Log73Testing
             //Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
             //Console.Info("Info");
             //Console.Warn("Warn");
+            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
+            Console.Options.Use24BitAnsi = false;
             //Console.Error("Error");
             MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
             MessageTypes.Debug.LogInfos.Add(new CallingMethodLogInfo());
@@ -29,6 +31,7 @@ namespace Log73Testing
             MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
             Console.Debug("Debug");
             SomeOtherMethod();
+            "pls be fixed".Dump();
             //Console.Error("No styles :(");
             //MessageTypes.Error.Style.Invert = true;
             //MessageTypes.Error.ContentStyle.Color = System.Drawing.Color.Orange;

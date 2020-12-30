@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Xml;
+using Log73.ColorSchemes;
 using Newtonsoft.Json;
 
 namespace Log73
@@ -59,8 +60,27 @@ namespace Log73
         public bool UseBrackets = true;
 
         public bool SpaceAfterInfo = true;
-        // TODO: Colorful.Console might also have this
-        public bool UseAnsi = true;
+        private bool _useAnsi = true;
+
+        public bool UseAnsi
+        {
+            get
+            {
+                return _useAnsi;
+            }
+            set
+            {
+                _useAnsi = value;
+                Use24BitAnsi = value;
+            }
+        }
+
+        public bool Use24BitAnsi = true;
+        /// <summary>
+        /// the 16 color ColorScheme to use when Use24BitAnsi is false
+        /// </summary>
+
+        public IColorScheme ColorScheme = new WindowsConsoleColorScheme();
 
         public JsonSerializerSettings JsonSerializerSettings = new()
         {

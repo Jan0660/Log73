@@ -185,7 +185,28 @@ namespace Log73
                 str = Ansi.RapidBlink + str + Ansi.BlinkOff;
             if (style.Faint)
                 str = Ansi.Faint + str + Ansi.NormalColor;
-            StdOut.Write(Ansi.ApplyColor(str, style.Color, style.BackgroundColor));
+            if (Options.Use24BitAnsi)
+                StdOut.Write(Ansi.ApplyColor(str, style.Color, style.BackgroundColor, Options.Use24BitAnsi));
+            else
+            {
+                var prevForegroundColor = Out.ForegroundColor;
+                var prevBackgroundColor = Out.BackgroundColor;
+                if (style.Color != null)
+                {
+                    var match = Ansi.BestMatch(style.Color.Value, Options.ColorScheme);
+                    var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
+                    Out.ForegroundColor = con;
+                }
+                if (style.BackgroundColor != null)
+                {
+                    var match = Ansi.BestMatch(style.BackgroundColor.Value, Options.ColorScheme);
+                    var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
+                    Out.BackgroundColor = con;
+                }
+                StdOut.Write($"{str}");
+                Out.ForegroundColor = prevForegroundColor;
+                Out.BackgroundColor = prevBackgroundColor;
+            }
         }
 
         private static void _writeInfo(object value, ConsoleStyleOption style)
@@ -244,7 +265,9 @@ namespace Log73
 
         private static string Serialize(this object obj)
         {
-            if (obj.IsValueType())
+            // doesnt work with is
+            // ReSharper disable once OperatorIsCanBeUsed
+            if (obj.IsValueType() | obj.GetType() == typeof(string))
             {
                 return obj.ToString();
             }

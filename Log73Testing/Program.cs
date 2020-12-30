@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Console = Log73.Console;
 using Out = System.Console;
 using Log73;
+using Log73.ColorSchemes;
 using Log73.ExtensionMethod;
 namespace Log73Testing
 {
@@ -22,6 +23,7 @@ namespace Log73Testing
             //Console.Warn("Warn");
             Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
             Console.Options.Use24BitAnsi = false;
+            Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
             //Console.Error("Error");
             MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
             MessageTypes.Debug.LogInfos.Add(new CallingMethodLogInfo());

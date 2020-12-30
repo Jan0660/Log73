@@ -203,7 +203,7 @@ namespace Log73
                     var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
                     Out.BackgroundColor = con;
                 }
-                StdOut.Write($"{str}");
+                StdOut.Write(str);
                 Out.ForegroundColor = prevForegroundColor;
                 Out.BackgroundColor = prevBackgroundColor;
             }
@@ -219,7 +219,7 @@ namespace Log73
 
         public static void Exception(Exception exception)
         {
-            Log(MessageTypes.Error, $@"An exception has ocurred: {exception.Message}
+            Log(MessageTypes.Error, $@"An exception has occurred: {exception.Message}
 {exception.StackTrace}");
         }
 

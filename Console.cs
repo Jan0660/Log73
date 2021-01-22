@@ -161,12 +161,7 @@ namespace Log73
             if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
                 _writeInfo(logTypeString, msgType.Style);
             else
-            {
-                var str = Options.UseBrackets ? $"[{logTypeString}]" : $"{logTypeString}";
-                entireMessage += GetStyled(str, msgType.Style);
-                if (Options.SpaceAfterInfo)
-                    entireMessage += ' ';
-            }
+                entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
             // write log infos
             var logInfoContext = new LogInfoContext { Value = value, MessageType = msgType };
             foreach (var extra in msgType.LogInfos)
@@ -175,11 +170,7 @@ namespace Log73
                     _writeInfo(extra.GetValue(logInfoContext), extra.Style);
                 else
                 {
-                    var logInfoValue = extra.GetValue(logInfoContext);
-                    var str = Options.UseBrackets ? $"[{logInfoValue}]" : $"{logInfoValue}";
-                    entireMessage += GetStyled(str, extra.Style);
-                    if (Options.SpaceAfterInfo)
-                        entireMessage += ' ';
+                    entireMessage += _getStyledAsLogInfo(extra.GetValue(logInfoContext), extra.Style);
                 }
             }
             // write the actual message
@@ -187,6 +178,14 @@ namespace Log73
                 _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle);
             else
                 StdOut.Write(GetStyled($"{entireMessage}{value.Serialize()}\n", msgType.ContentStyle));
+        }
+        private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
+        {
+            str = Options.UseBrackets ? $"[{str}]" : str;
+            var stri = GetStyled(str, style);
+            if (Options.SpaceAfterInfo)
+                stri += ' ';
+            return stri;
         }
         /// <summary>
         /// Writes a string to StdOut with color using System.Console.ForegroundColor and System.Console.BackgroundColor

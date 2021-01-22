@@ -20,6 +20,46 @@ Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
 
 ![output](https://i.imgur.com/AI3b8Lk.png)
 
+# Table of contents
+
+1. [Using Ansi](#Ansi)
+2. [LogTypes](#LogTypes)
+3. [Styling](#Styling)
+4. [Message Types](#Message-types)
+
+## Ansi
+
+All of the styling options are made possible thank to [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code). Your terminal might not support them and your console will look like this: 
+
+![visual represantion of pain when rider somehow disables ansi on windows](https://i.imgur.com/uUreBii.png)
+
+(the only terminal that displays them like this I have discovered is JetBrains Rider on windows)
+
+If you happen to have this problem you can disable ansi:
+
+```csharp
+// note: this also automatically sets Console.Options.Use24BitAnsi to false
+Console.Options.Ansi = false;
+// you can also disable 24 bit colors separately
+Console.Options.Use24BitAnsi = false;
+```
+
+After disabling ansi Log73 handles converting [`System.Drawing.Color`](https://docs.microsoft.com/en-us/dotnet/api/system.drawing.color) to the [`System.ConsoleColor`](https://docs.microsoft.com/en-us/dotnet/api/system.consolecolor) enum for you
+
+![color conversion](https://i.imgur.com/5e21xC9.png)
+
+Many terminals seem to use their own color scheme for the basic 16 colors, meaning that it might not look the best if converting to a different one, that's why you can use one of the premade ones or create your own by inheriting from the `IColorScheme` interface!
+
+
+
+For example, if you use JetBrains Rider with the dark melon theme:
+
+```csharp
+Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
+```
+
+Default color scheme used is `WindowsConsoleColorScheme`.
+
 ## LogTypes
 
 There are 4 LogTypes: Info, Warn, Error, Debug. Which look like this by default:

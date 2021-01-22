@@ -24,13 +24,14 @@ namespace Log73
         }
 
         public string GetValue(LogInfoContext context)
-            => $"{DateTime.Now:TimeFormat}";
+            => $"{DateTime.Now.ToString(TimeFormat)}";
     }
 
     public class CallingMethodLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = true;
+        public string UnableToGet = "Unable to get method";
 
         public string GetValue(LogInfoContext context)
         {
@@ -43,7 +44,7 @@ namespace Log73
             }
             catch
             {
-                return "ERROR";
+                return UnableToGet;
             }
         }
 
@@ -73,6 +74,7 @@ namespace Log73
     {
         public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = true;
+        public string UnableToGet = "Unable to get class";
 
         public string GetValue(LogInfoContext context)
         {
@@ -83,7 +85,7 @@ namespace Log73
             }
             catch
             {
-                return "ERROR";
+                return UnableToGet;
             }
         }
     }
@@ -92,6 +94,7 @@ namespace Log73
     {
         public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
         public bool FullName = false;
+        public string UnableToGet = "Unable to get module";
 
         public string GetValue(LogInfoContext context)
         {
@@ -102,7 +105,7 @@ namespace Log73
             }
             catch
             {
-                return "ERROR";
+                return UnableToGet;
             }
         }
     }

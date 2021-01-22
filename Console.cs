@@ -155,20 +155,78 @@ namespace Log73
                 msgType.LogType == LogType.Warn
             ))
                 return;
-            _writeInfo($"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}", msgType.Style);
+            var entireMessage = "";
+            // write the LogType
+            var logTypeString = $"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}";
+            if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
+                _writeInfo(logTypeString, msgType.Style);
+            else
+            {
+                var str = Options.UseBrackets ? $"[{logTypeString}]" : $"{logTypeString}";
+                entireMessage += GetStyled(str, msgType.Style);
+                if (Options.SpaceAfterInfo)
+                    entireMessage += ' ';
+            }
+            // write log infos
+            var logInfoContext = new LogInfoContext { Value = value, MessageType = msgType };
             foreach (var extra in msgType.LogInfos)
             {
-                _writeInfo(extra.GetValue(new LogInfoContext {Value = value, MessageType = msgType}), extra.Style);
+                if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
+                    _writeInfo(extra.GetValue(logInfoContext), extra.Style);
+                else
+                {
+                    var logInfoValue = extra.GetValue(logInfoContext);
+                    var str = Options.UseBrackets ? $"[{logInfoValue}]" : $"{logInfoValue}";
+                    entireMessage += GetStyled(str, extra.Style);
+                    if (Options.SpaceAfterInfo)
+                        entireMessage += ' ';
+                }
             }
-
-            //if (value.GetType() == typeof(string))
-            //    value = ((string)value).Replace("{", "{{").Replace("}", "}}");
-            _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle);
+            // write the actual message
+            if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
+                _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle);
+            else
+                StdOut.Write(GetStyled($"{entireMessage}{value.Serialize()}\n", msgType.ContentStyle));
+        }
+        /// <summary>
+        /// Writes a string to StdOut with color using System.Console.ForegroundColor and System.Console.BackgroundColor
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="style"></param>
+        private static void _writeBasicColored(string str, ConsoleStyleOption style)
+        {
+            var prevForegroundColor = Out.ForegroundColor;
+            var prevBackgroundColor = Out.BackgroundColor;
+            if (style.Color != null)
+            {
+                var match = Ansi.BestMatch(style.Color.Value, Options.ColorScheme);
+                var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
+                Out.ForegroundColor = con;
+            }
+            if (style.BackgroundColor != null)
+            {
+                var match = Ansi.BestMatch(style.BackgroundColor.Value, Options.ColorScheme);
+                var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
+                Out.BackgroundColor = con;
+            }
+            StdOut.Write(str);
+            Out.ForegroundColor = prevForegroundColor;
+            Out.BackgroundColor = prevBackgroundColor;
         }
 
         public static void _writeStyle(object value, ConsoleStyleOption style)
         {
             var str = value.ToString();
+            if(Options.Use24BitAnsi)
+                StdOut.Write(GetStyled(str, style));
+            if(!Options.Use24BitAnsi)
+            {
+                _writeBasicColored(GetStyled(str, style), style);
+            }
+        }
+
+        public static string GetStyled(string str, ConsoleStyleOption style)
+        {
             if (style.Bold)
                 str = Ansi.Bold + str + Ansi.BoldOff;
             if (style.Italic)
@@ -186,27 +244,8 @@ namespace Log73
             if (style.Faint)
                 str = Ansi.Faint + str + Ansi.NormalColor;
             if (Options.Use24BitAnsi)
-                StdOut.Write(Ansi.ApplyColor(str, style.Color, style.BackgroundColor, Options.Use24BitAnsi));
-            else
-            {
-                var prevForegroundColor = Out.ForegroundColor;
-                var prevBackgroundColor = Out.BackgroundColor;
-                if (style.Color != null)
-                {
-                    var match = Ansi.BestMatch(style.Color.Value, Options.ColorScheme);
-                    var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
-                    Out.ForegroundColor = con;
-                }
-                if (style.BackgroundColor != null)
-                {
-                    var match = Ansi.BestMatch(style.BackgroundColor.Value, Options.ColorScheme);
-                    var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
-                    Out.BackgroundColor = con;
-                }
-                StdOut.Write(str);
-                Out.ForegroundColor = prevForegroundColor;
-                Out.BackgroundColor = prevBackgroundColor;
-            }
+                str = Ansi.ApplyColor(str, style.Color, style.BackgroundColor, Options.Use24BitAnsi);
+            return str;
         }
 
         private static void _writeInfo(object value, ConsoleStyleOption style)

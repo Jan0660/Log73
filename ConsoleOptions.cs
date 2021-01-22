@@ -74,6 +74,14 @@ namespace Log73
         }
 
         public bool Use24BitAnsi = true;
+
+        /// <summary>
+        /// When Use24BitAnsi is true, LogInfos are written together with the message
+        /// and not written in seperate write calls, if Use24BitAnsi is false and this is true they ARE
+        /// written in seperate calls because of limitations.
+        /// </summary>
+        public bool SeperateLogInfoWriteCalls = false;
+
         /// <summary>
         /// the 16 color ColorScheme to use when Use24BitAnsi is false
         /// </summary>

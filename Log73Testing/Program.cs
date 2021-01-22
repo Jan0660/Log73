@@ -23,7 +23,8 @@ namespace Log73Testing
             //Console.Warn("Warn");
             Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
             Console.Options.Use24BitAnsi = false;
-            Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
+            // Console.Options.SeperateLogInfoWriteCalls = true;
+            //Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
             //Console.Error("Error");
             MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
             MessageTypes.Debug.LogInfos.Add(new CallingMethodLogInfo());
@@ -31,6 +32,7 @@ namespace Log73Testing
             MessageTypes.Debug.LogInfos.Add(new CallingModuleLogInfo());
             MessageTypes.Debug.LogInfos.Add(new TypeLogInfo());
             MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
+            Console.Log(new object());
             Console.Debug("Debug");
             SomeOtherMethod();
             "pls be fixed".Dump();

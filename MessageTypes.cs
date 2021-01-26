@@ -36,7 +36,8 @@ namespace Log73
         {
             LogType = LogType.Error,
             Name = "Error",
-            Style = Styles.Error
+            Style = Styles.Error,
+            WriteToStdErr = true
         };
         public static MessageType Debug = new()
         {
@@ -61,6 +62,7 @@ namespace Log73
         public string Name;
         public ConsoleStyleOption Style = new();
         public List<ILogInfo> LogInfos = new();
+        public bool WriteToStdErr = false;
         /// <summary>
         /// The style to be used for the content of the message
         /// </summary>

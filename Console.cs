@@ -27,7 +27,9 @@ namespace Log73
     {
         private static bool _lock = false;
         private static List<(MessageType msgType, object value)> _logQueue = new();
-        private static TextWriter StdOut => System.Console.Out;
+        private static TextWriter StdOut = Out.Out;
+        private static TextWriter StdErr = Out.Error;
+        private static TextReader StdIn = Out.In;
 
         public static ConsoleOptions Options = new ConsoleOptions();
 
@@ -155,11 +157,12 @@ namespace Log73
                 msgType.LogType == LogType.Warn
             ))
                 return;
+            var outStream = msgType.WriteToStdErr ? StdErr : StdOut;
             var entireMessage = "";
             // write the LogType
             var logTypeString = $"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}";
             if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
-                _writeInfo(logTypeString, msgType.Style);
+                _writeInfo(logTypeString, msgType.Style, outStream);
             else
                 entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
             // write log infos
@@ -167,7 +170,7 @@ namespace Log73
             foreach (var extra in msgType.LogInfos)
             {
                 if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
-                    _writeInfo(extra.GetValue(logInfoContext), extra.Style);
+                    _writeInfo(extra.GetValue(logInfoContext), extra.Style, outStream);
                 else
                 {
                     entireMessage += _getStyledAsLogInfo(extra.GetValue(logInfoContext), extra.Style);
@@ -175,9 +178,9 @@ namespace Log73
             }
             // write the actual message
             if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
-                _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle);
+                _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle, outStream);
             else
-                StdOut.Write(GetStyled($"{entireMessage}{value.Serialize()}\n", msgType.ContentStyle));
+                outStream.Write(GetStyled($"{entireMessage}{value.Serialize()}\n", msgType.ContentStyle));
         }
         private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
         {
@@ -192,7 +195,7 @@ namespace Log73
         /// </summary>
         /// <param name="str"></param>
         /// <param name="style"></param>
-        private static void _writeBasicColored(string str, ConsoleStyleOption style)
+        private static void _writeBasicColored(string str, ConsoleStyleOption style, TextWriter writer)
         {
             var prevForegroundColor = Out.ForegroundColor;
             var prevBackgroundColor = Out.BackgroundColor;
@@ -208,19 +211,19 @@ namespace Log73
                 var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
                 Out.BackgroundColor = con;
             }
-            StdOut.Write(str);
+            writer.Write(str);
             Out.ForegroundColor = prevForegroundColor;
             Out.BackgroundColor = prevBackgroundColor;
         }
 
-        public static void _writeStyle(object value, ConsoleStyleOption style)
+        public static void _writeStyle(object value, ConsoleStyleOption style, TextWriter writer)
         {
             var str = value.ToString();
             if(Options.Use24BitAnsi)
-                StdOut.Write(GetStyled(str, style));
+                writer.Write(GetStyled(str, style));
             if(!Options.Use24BitAnsi)
             {
-                _writeBasicColored(GetStyled(str, style), style);
+                _writeBasicColored(GetStyled(str, style), style, writer);
             }
         }
 
@@ -247,12 +250,12 @@ namespace Log73
             return str;
         }
 
-        private static void _writeInfo(object value, ConsoleStyleOption style)
+        private static void _writeInfo(object value, ConsoleStyleOption style, TextWriter writer)
         {
             var str = Options.UseBrackets ? $"[{value}]" : $"{value}";
-            _writeStyle(str, style);
+            _writeStyle(str, style, writer);
             if (Options.SpaceAfterInfo)
-                Out.Write(" ");
+                writer.Write(" ");
         }
 
         public static void Exception(Exception exception)
@@ -285,19 +288,28 @@ namespace Log73
             => Out.ResetColor();
 
         public static int Read()
-            => Out.Read();
+            => StdIn.Read();
 
         public static string ReadLine()
-            => Out.ReadLine();
-
-        public static ConsoleKeyInfo ReadKey()
-            => Out.ReadKey();
-
-        public static ConsoleKeyInfo ReadKey(bool intercept)
-            => Out.ReadKey(intercept);
+            => StdIn.ReadLine();
 
         public static (int, int) GetCursorPosition()
             => (Out.CursorLeft, Out.CursorTop);
+
+        public static void SetIn(TextReader textReader)
+        {
+            StdIn = textReader ?? throw new ArgumentNullException(nameof(textReader));
+        }
+        
+        public static void SetOut(TextWriter textWriter)
+        {
+            StdOut = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
+        }
+        
+        public static void SetError(TextWriter textWriter)
+        {
+            StdErr = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
+        }
 
         #endregion
 

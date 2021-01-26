@@ -22,7 +22,7 @@ namespace Log73Testing
             //Console.Info("Info");
             //Console.Warn("Warn");
             Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
-            Console.Options.Use24BitAnsi = false;
+            //Console.Options.Use24BitAnsi = false;
             // Console.Options.SeperateLogInfoWriteCalls = true;
             //Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
             //Console.Error("Error");

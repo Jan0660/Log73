@@ -35,6 +35,8 @@ namespace Log73Testing
             MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
             Console.Log(new object());
             Console.Debug("Debug");
+            MessageTypes.Warn.Name = null;
+            Console.Warn("Warn with null");
             SomeOtherMethod();
             "pls be fixed".Dump();
             //Console.Error("No styles :(");

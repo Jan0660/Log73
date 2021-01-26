@@ -160,11 +160,14 @@ namespace Log73
             var outStream = msgType.WriteToStdErr ? StdErr : StdOut;
             var entireMessage = "";
             // write the LogType
-            var logTypeString = $"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}";
-            if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
-                _writeInfo(logTypeString, msgType.Style, outStream);
-            else
-                entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
+            if (msgType.Name != null)
+            {
+                var logTypeString = $"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}";
+                if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
+                    _writeInfo(logTypeString, msgType.Style, outStream);
+                else
+                    entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
+            }
             // write log infos
             var logInfoContext = new LogInfoContext { Value = value, MessageType = msgType };
             foreach (var extra in msgType.LogInfos)

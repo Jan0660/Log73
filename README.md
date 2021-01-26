@@ -1,6 +1,7 @@
 # Log73
-[![NuGet](http://img.shields.io/nuget/v/Log73)](https://www.nuget.org/packages/Log73/)
-[![Prerelease](http://img.shields.io/nuget/vpre/Log73)](https://www.nuget.org/packages/Log73/)
+[![NuGet](https://img.shields.io/nuget/v/Log73)](https://www.nuget.org/packages/Log73/)
+[![Prerelease](https://img.shields.io/nuget/vpre/Log73)](https://www.nuget.org/packages/Log73/)
+
 #### A powerful and customizable .NET logging library
 
 ## Basic example

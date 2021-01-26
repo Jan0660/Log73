@@ -31,6 +31,7 @@ namespace Log73Testing
             MessageTypes.Debug.LogInfos.Add(new ThreadLogInfo());
             MessageTypes.Debug.LogInfos.Add(new CallingModuleLogInfo());
             MessageTypes.Debug.LogInfos.Add(new TypeLogInfo());
+            MessageTypes.Debug.LogInfos.Add(new NullLogInfo());
             MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo() { Style = new() { Color = System.Drawing.Color.LightPink} });
             Console.Log(new object());
             Console.Debug("Debug");
@@ -77,5 +78,13 @@ namespace Log73Testing
 
         public static void SomeOtherMethod()
             => "Hello".DumpDebug();
+
+        public class NullLogInfo : ILogInfo
+        {
+            public ConsoleStyleOption Style { get; set; } = new ConsoleStyleOption();
+
+            public string GetValue(LogInfoContext context)
+                => null;
+        }
     }
 }

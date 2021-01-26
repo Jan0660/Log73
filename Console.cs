@@ -169,11 +169,14 @@ namespace Log73
             var logInfoContext = new LogInfoContext { Value = value, MessageType = msgType };
             foreach (var extra in msgType.LogInfos)
             {
+                var val = extra.GetValue(logInfoContext);
+                if (val == null)
+                    continue;
                 if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
-                    _writeInfo(extra.GetValue(logInfoContext), extra.Style, outStream);
+                    _writeInfo(val, extra.Style, outStream);
                 else
                 {
-                    entireMessage += _getStyledAsLogInfo(extra.GetValue(logInfoContext), extra.Style);
+                    entireMessage += _getStyledAsLogInfo(val, extra.Style);
                 }
             }
             // write the actual message

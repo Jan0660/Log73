@@ -5,6 +5,9 @@ using System.Text;
 using Styles = Log73.ConsoleStyleOptions;
 namespace Log73
 {
+    /// <summary>
+    /// Stores the default <see cref="MessageType"/>s included with Log73.
+    /// </summary>
     public static class MessageTypes
     {
         private static ConsoleStyleOptions Styles => Console.Options.Style;
@@ -46,6 +49,11 @@ namespace Log73
             Style = Styles.Debug
         };
 
+        /// <summary>
+        /// Gets the corresponding <see cref="MessageType"/> to the specified <see cref="LogType"/>.
+        /// </summary>
+        /// <param name="logType"></param>
+        /// <returns></returns>
         public static MessageType Get(LogType logType)
             => logType switch
             {
@@ -54,8 +62,18 @@ namespace Log73
                 LogType.Error => Error,
                 LogType.Debug => Debug,
             };
+
+        /// <summary>
+        /// Gets all of the <see cref="MessageType"/>s in this class as an array.
+        /// </summary>
+        /// <returns><see cref="Info"/>, <see cref="Warn"/>, <see cref="Error"/>, <see cref="Debug"/>, <see cref="Start"/> and <see cref="Done"/> in an array, in this order.</returns>
+        public static MessageType[] AsArray()
+            => new []{ Info, Warn, Error, Debug, Start, Done };
     }
 
+    /// <summary>
+    /// Class to store the information on how to log a message like it's <see cref="Log73.LogType"/> and <see cref="ConsoleStyleOption" />s.
+    /// </summary>
     public class MessageType
     {
         public LogType LogType;

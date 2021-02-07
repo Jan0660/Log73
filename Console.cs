@@ -32,53 +32,94 @@ namespace Log73
         private static TextReader StdIn = Out.In;
 
         public static ConsoleOptions Options = new ConsoleOptions();
-
+        
+        /// <summary>
+        /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
+        /// </summary>
         public static void WriteLine(object value)
             => Log(MessageTypes.Info, value);
 
         public static void Write(object value)
             => StdOut.Write(value.Serialize());
 
+        /// <summary>
+        /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
+        /// </summary>
+        /// <param name="value"></param>
         public static void Info(object value)
-            => Log(LogType.Info, value);
-
+            => Log(MessageTypes.Info, value);
+        
+        /// <summary>
+        /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Warn"/> <see cref="MessageType"/>.
+        /// </summary>
+        /// <param name="value"></param>
         public static void Warn(object value)
-            => Log(LogType.Warn, value);
-
+            => Log(MessageTypes.Warn, value);
+        
+        /// <summary>
+        /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Error"/> <see cref="MessageType"/>.
+        /// </summary>
+        /// <param name="value"></param>
         public static void Error(object value)
-            => Log(LogType.Error, value);
-
+            => Log(MessageTypes.Error, value);
+        
+        /// <summary>
+        /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Debug"/> <see cref="MessageType"/>.
+        /// </summary>
+        /// <param name="value"></param>
         public static void Debug(object value)
-            => Log(LogType.Debug, value);
-
+            => Log(MessageTypes.Debug, value);
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as JSON using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
+        /// </summary>
         public static void ObjectJson(object obj)
             => ObjectJson(MessageTypes.Info, obj);
-
+        /// <summary>
+        /// Logs the <paramref name="value"/> serialized as JSON using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
+        /// </summary>
         public static void ObjectJson(LogType logType, object obj)
             => ObjectJson(MessageTypes.Get(logType), obj);
-
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as JSON using the specified <see cref="MessageType"/>.
+        /// </summary>
         public static void ObjectJson(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsJson());
-
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as XML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
+        /// </summary>
         public static void ObjectXml(object obj)
             => ObjectXml(MessageTypes.Info, obj);
-
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as XML using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
+        /// </summary>
         public static void ObjectXml(LogType logType, object obj)
             => ObjectXml(MessageTypes.Get(logType), obj);
-
+        
         /// <summary>
-        /// only works with public types
+        /// Logs the <paramref name="obj"/> serialized as XML using the specified <see cref="MessageType"/>.
         /// </summary>
-        /// <param name="obj"></param>
         public static void ObjectXml(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsXml());
-
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as YAML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
+        /// </summary>
         public static void ObjectYaml(object obj)
             => ObjectYaml(MessageTypes.Info, obj);
-
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as YAML using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
+        /// </summary>
         public static void ObjectYaml(LogType logType, object obj)
             => ObjectYaml(MessageTypes.Get(logType), obj);
-
+        
+        /// <summary>
+        /// Logs the <paramref name="obj"/> serialized as YAML using the specified <see cref="MessageType"/>.
+        /// </summary>
         public static void ObjectYaml(MessageType msgType, object obj)
         {
             Log(msgType, obj.SerializeAsYaml());
@@ -197,7 +238,7 @@ namespace Log73
             return stri;
         }
         /// <summary>
-        /// Writes a string to StdOut with color using System.Console.ForegroundColor and System.Console.BackgroundColor
+        /// Writes a string to <see cref="StdOut"/> with color using <see cref="System.Console.ForegroundColor"/> and <see cref="System.Console.BackgroundColor"/>
         /// </summary>
         /// <param name="str"></param>
         /// <param name="style"></param>
@@ -271,31 +312,39 @@ namespace Log73
         }
 
         #region System.Console compatibility
-
+        /// <inheritdoc cref="System.Console.Beep"/>
         public static void Beep()
             => Out.Beep();
-
+        
+        /// <inheritdoc cref="System.Console.Beep(int, int)"/>
         public static void Beep(int frequency, int duration)
             => Out.Beep(frequency, duration);
-
+        
+        /// <inheritdoc cref="System.Console.Clear"/>
         public static void Clear()
             => Out.Clear();
-
+        
+        /// <inheritdoc cref="System.Console.SetWindowSize(int, int)"/>
         public static void SetWindowSize(int width, int height)
             => Out.SetWindowSize(width, height);
-
+        
+        /// <inheritdoc cref="System.Console.SetCursorPosition(int, int)"/>
         public static void SetCursorPosition(int left, int top)
             => Out.SetCursorPosition(left, top);
-
+        
+        /// <inheritdoc cref="System.Console.SetBufferSize(int, int)"/>
         public static void SetBufferSize(int width, int height)
             => Out.SetBufferSize(width, height);
-
+        
+        /// <inheritdoc cref="System.Console.ResetColor"/>
         public static void ResetColor()
             => Out.ResetColor();
-
+        
+        /// <inheritdoc cref="TextReader.Read"/>
         public static int Read()
             => StdIn.Read();
-
+        
+        /// <inheritdoc cref="TextReader.ReadLine"/>
         public static string ReadLine()
             => StdIn.ReadLine();
 

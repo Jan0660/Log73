@@ -7,6 +7,10 @@ using Log73.ColorSchemes;
 
 namespace Log73
 {
+    /// <summary>
+    /// Class to store the Ansi codes required for styling, all of the properties return <see cref="String.Empty"/> if <see cref="ConsoleOptions.UseAnsi"/> is <see langword="false"/>.
+    /// Mostly derived from the "ANSI escape code" page on wikipedia.org.
+    /// </summary>
     // https://en.wikipedia.org/wiki/ANSI_escape_code
     public static class Ansi
     {

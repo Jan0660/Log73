@@ -48,6 +48,10 @@ namespace Log73
             }
         }
 
+        /// <summary>
+        /// The method used to get the caller <see cref="StackFrame"/> in the <see cref="CallingMethodLogInfo"/>, <see cref="CallingClassLogInfo"/> and <see cref="CallingModuleLogInfo"/> <see cref="ILogInfo"/>s.
+        /// </summary>
+        /// <exception cref="T:System.Exception">If fails to get the caller <see cref="StackFrame"/> an exception is thrown.</exception>
         public static StackFrame GetCallerFrame()
         {
             var h = new StackTrace();

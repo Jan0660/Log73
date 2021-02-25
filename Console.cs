@@ -42,6 +42,7 @@ namespace Log73
         public static void Write(object value)
             => StdOut.Write(value.Serialize());
 
+        #region Info, Warn, Error, Debug + ObjectX methods
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
@@ -124,6 +125,7 @@ namespace Log73
         {
             Log(msgType, obj.SerializeAsYaml());
         }
+        #endregion
 
         public static void Task(string name, Task task)
         {
@@ -367,6 +369,9 @@ namespace Log73
         }
 
         #endregion
+
+        public static void SetCursorPosition((int, int) position)
+            => SetCursorPosition(position.Item1, position.Item2);
 
         private static string Serialize(this object obj)
         {

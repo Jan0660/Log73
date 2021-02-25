@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using Console = Log73.Console;
 using Out = System.Console;
@@ -22,9 +23,21 @@ namespace Log73Testing
             //Console.Info("Info");
             //Console.Warn("Warn");
             Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
-            //Console.Options.Use24BitAnsi = false;
-            // Console.Options.SeperateLogInfoWriteCalls = true;
-            //Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
+            Console.Options.Use24BitAnsi = false;
+            Console.Options.SeperateLogInfoWriteCalls = true;
+            Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
+            for (int i = 0; i < 12; i++)
+            {
+                Thread thread = new Thread(() =>
+                {
+                    for (int j = 0; j < 100000; j++)
+                    {
+                        Console.Info(j);
+                    }
+                });
+                thread.Start();
+            }
+            Thread.Sleep(100000);
             //Console.Error("Error");
             MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
             MessageTypes.Debug.LogInfos.Add(new CallingMethodLogInfo());

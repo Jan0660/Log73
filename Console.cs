@@ -164,7 +164,10 @@ namespace Log73
             // a message is currently being logged, add it to the log queue
             if (_lock == true)
             {
-                _logQueue.Add((msgType, value));
+                lock (_logQueue)
+                {
+                    _logQueue.Add((msgType, value));
+                }
                 return;
             }
 
@@ -182,7 +185,10 @@ namespace Log73
             {
                 var msg = _logQueue[0];
                 _log(msg.msgType, msg.value);
-                _logQueue.RemoveAt(0);
+                lock (_logQueue)
+                {
+                    _logQueue.RemoveAt(0);
+                }
             }
         }
 

@@ -26,7 +26,7 @@ namespace Log73Testing
             Console.Options.Use24BitAnsi = false;
             Console.Options.SeperateLogInfoWriteCalls = true;
             Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Thread thread = new Thread(() =>
                 {

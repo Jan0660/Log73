@@ -32,7 +32,7 @@ namespace Log73
         private static TextReader StdIn = Out.In;
 
         public static ConsoleOptions Options = new ConsoleOptions();
-        
+
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
@@ -49,28 +49,28 @@ namespace Log73
         /// <param name="value"></param>
         public static void Info(object value)
             => Log(MessageTypes.Info, value);
-        
+
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Warn"/> <see cref="MessageType"/>.
         /// </summary>
         /// <param name="value"></param>
         public static void Warn(object value)
             => Log(MessageTypes.Warn, value);
-        
+
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Error"/> <see cref="MessageType"/>.
         /// </summary>
         /// <param name="value"></param>
         public static void Error(object value)
             => Log(MessageTypes.Error, value);
-        
+
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Debug"/> <see cref="MessageType"/>.
         /// </summary>
         /// <param name="value"></param>
         public static void Debug(object value)
             => Log(MessageTypes.Debug, value);
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as JSON using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
@@ -81,43 +81,43 @@ namespace Log73
         /// </summary>
         public static void ObjectJson(LogType logType, object obj)
             => ObjectJson(MessageTypes.Get(logType), obj);
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as JSON using the specified <see cref="MessageType"/>.
         /// </summary>
         public static void ObjectJson(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsJson());
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as XML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
         public static void ObjectXml(object obj)
             => ObjectXml(MessageTypes.Info, obj);
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as XML using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
         /// </summary>
         public static void ObjectXml(LogType logType, object obj)
             => ObjectXml(MessageTypes.Get(logType), obj);
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as XML using the specified <see cref="MessageType"/>.
         /// </summary>
         public static void ObjectXml(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsXml());
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as YAML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
         public static void ObjectYaml(object obj)
             => ObjectYaml(MessageTypes.Info, obj);
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as YAML using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
         /// </summary>
         public static void ObjectYaml(LogType logType, object obj)
             => ObjectYaml(MessageTypes.Get(logType), obj);
-        
+
         /// <summary>
         /// Logs the <paramref name="obj"/> serialized as YAML using the specified <see cref="MessageType"/>.
         /// </summary>
@@ -180,14 +180,18 @@ namespace Log73
 
         public static void _handleLogQueue()
         {
-            // log all of the messages in log queue and remove them after they're logged
-            while (_logQueue.Count != 0)
+            lock (_logQueue)
             {
-                var msg = _logQueue[0];
-                _log(msg.msgType, msg.value);
-                lock (_logQueue)
+                // log all of the messages in log queue and remove them after they're logged
+                if (_logQueue.Count == 0)
+                    return;
+                while (true)
                 {
+                    var msg = _logQueue[0];
+                    _log(msg.msgType, msg.value);
                     _logQueue.RemoveAt(0);
+                    if (_logQueue.Count == 0)
+                        return;
                 }
             }
         }
@@ -274,9 +278,9 @@ namespace Log73
         public static void _writeStyle(object value, ConsoleStyleOption style, TextWriter writer)
         {
             var str = value.ToString();
-            if(Options.Use24BitAnsi)
+            if (Options.Use24BitAnsi)
                 writer.Write(GetStyled(str, style));
-            if(!Options.Use24BitAnsi)
+            if (!Options.Use24BitAnsi)
             {
                 _writeBasicColored(GetStyled(str, style), style, writer);
             }
@@ -323,35 +327,35 @@ namespace Log73
         /// <inheritdoc cref="System.Console.Beep"/>
         public static void Beep()
             => Out.Beep();
-        
+
         /// <inheritdoc cref="System.Console.Beep(int, int)"/>
         public static void Beep(int frequency, int duration)
             => Out.Beep(frequency, duration);
-        
+
         /// <inheritdoc cref="System.Console.Clear"/>
         public static void Clear()
             => Out.Clear();
-        
+
         /// <inheritdoc cref="System.Console.SetWindowSize(int, int)"/>
         public static void SetWindowSize(int width, int height)
             => Out.SetWindowSize(width, height);
-        
+
         /// <inheritdoc cref="System.Console.SetCursorPosition(int, int)"/>
         public static void SetCursorPosition(int left, int top)
             => Out.SetCursorPosition(left, top);
-        
+
         /// <inheritdoc cref="System.Console.SetBufferSize(int, int)"/>
         public static void SetBufferSize(int width, int height)
             => Out.SetBufferSize(width, height);
-        
+
         /// <inheritdoc cref="System.Console.ResetColor"/>
         public static void ResetColor()
             => Out.ResetColor();
-        
+
         /// <inheritdoc cref="TextReader.Read"/>
         public static int Read()
             => StdIn.Read();
-        
+
         /// <inheritdoc cref="TextReader.ReadLine"/>
         public static string ReadLine()
             => StdIn.ReadLine();
@@ -363,12 +367,12 @@ namespace Log73
         {
             StdIn = textReader ?? throw new ArgumentNullException(nameof(textReader));
         }
-        
+
         public static void SetOut(TextWriter textWriter)
         {
             StdOut = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
         }
-        
+
         public static void SetError(TextWriter textWriter)
         {
             StdErr = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
@@ -389,7 +393,7 @@ namespace Log73
             }
             else
             {
-                if ((int) Options.ObjectSerialization % (int) 2 == 1)
+                if ((int)Options.ObjectSerialization % (int)2 == 1)
                 {
                     // check if ToString is overriden
                     // todo: probly not best way of doing this

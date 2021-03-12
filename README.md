@@ -24,7 +24,7 @@ Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
 # Table of contents
 
 1. [Using Ansi](#ansi)
-2. [LogTypes and LogLevels](#LogTypes and LogLevels)
+2. [LogTypes and LogLevels](#LogTypes%20and%20LogLevels)
 3. [Styling](#styling)
 4. [Message Types](#message-types)
 5. [LogInfos](#loginfos)

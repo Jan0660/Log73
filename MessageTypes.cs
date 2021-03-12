@@ -10,7 +10,7 @@ namespace Log73
     /// </summary>
     public static class MessageTypes
     {
-        private static ConsoleStyleOptions Styles => Console.Options.Style;
+        private static ConsoleStyleOptions Styles => new();
         public static MessageType Info = new()
         {
             LogType = LogType.Info,
@@ -76,7 +76,7 @@ namespace Log73
     /// </summary>
     public class MessageType
     {
-        public LogType LogType;
+        public LogType LogType = LogType.Info;
         public string Name;
         public ConsoleStyleOption Style = new();
         public List<ILogInfo> LogInfos = new();

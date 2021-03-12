@@ -37,7 +37,13 @@ namespace Log73
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
         public static void WriteLine(object value)
-            => Log(MessageTypes.Info, value);
+            => Log(Options.WriteLineMessageType, value);
+
+        /// <summary>
+        /// Logs a newline.
+        /// </summary>
+        public static void WriteLine()
+            => Write('\n');
 
         public static void Write(object value)
             => StdOut.Write(value.Serialize());
@@ -216,19 +222,25 @@ namespace Log73
             if (msgType.Name != null)
             {
                 var logTypeString = $"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}";
-                if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
+                if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
                     _writeInfo(logTypeString, msgType.Style, outStream);
                 else
                     entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
             }
+
+            var serialized = value.Serialize();
             // write log infos
-            var logInfoContext = new LogInfoContext { Value = value, MessageType = msgType };
+            var logInfoContext = new LogInfoContext
+            {
+                Value = value, MessageType = msgType,
+                ValueString = serialized
+            };
             foreach (var extra in msgType.LogInfos)
             {
                 var val = extra.GetValue(logInfoContext);
                 if (val == null)
                     continue;
-                if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
+                if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
                     _writeInfo(val, extra.Style, outStream);
                 else
                 {
@@ -236,10 +248,10 @@ namespace Log73
                 }
             }
             // write the actual message
-            if (!Options.Use24BitAnsi | Options.SeperateLogInfoWriteCalls)
-                _writeStyle($"{value.Serialize()}\n", msgType.ContentStyle, outStream);
+            if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
+                _writeStyle($"{serialized}\n", msgType.ContentStyle, outStream);
             else
-                outStream.Write(GetStyled($"{entireMessage}{value.Serialize()}\n", msgType.ContentStyle));
+                outStream.Write(GetStyled($"{entireMessage}{serialized}\n", msgType.ContentStyle));
         }
         private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
         {
@@ -275,7 +287,7 @@ namespace Log73
             Out.BackgroundColor = prevBackgroundColor;
         }
 
-        public static void _writeStyle(object value, ConsoleStyleOption style, TextWriter writer)
+        private static void _writeStyle(object value, ConsoleStyleOption style, TextWriter writer)
         {
             var str = value.ToString();
             if (Options.Use24BitAnsi)
@@ -319,8 +331,20 @@ namespace Log73
 
         public static void Exception(Exception exception)
         {
-            Log(MessageTypes.Error, $@"An exception has occurred: {exception.Message}
-{exception.StackTrace}");
+            Log(MessageTypes.Error, $@"An exception has occurred: {exception.Message}"
+            + exception.StackTrace == null ? "" : exception.StackTrace + '\n');
+        }
+
+        /// <summary>
+        /// Invokes <paramref name="finished"/> after the <see cref="Task"/> returned by <paramref name="code"/> has finished.
+        /// </summary>
+        /// <param name="code">The <see cref="Task"/> to be timed.</param>
+        /// <param name="finished"></param>
+        public static async Task StopwatchTask(Func<Task> code, Action<long> finished)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            await code();
+            finished(stopwatch.ElapsedMilliseconds);
         }
 
         #region System.Console compatibility

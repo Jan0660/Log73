@@ -27,7 +27,7 @@ namespace Log73
     {
         public LogLevel LogLevel = LogLevel.Standard;
 
-        public LogType DumpLogType = LogType.Info;
+        public MessageType DumpMessageType = MessageTypes.Info;
         [Flags]
         public enum ObjectSerializationMethod
         {
@@ -101,10 +101,10 @@ namespace Log73
 
         /// <summary>
         /// When <see cref="Use24BitAnsi" /> is <see langword="true"/>, <see cref="ILogInfo"/>s are written together with the message
-        /// and not written in seperate write calls, if <see cref="Use24BitAnsi" /> is <see langword="false"/> and this 
+        /// and not written in separate write calls, if <see cref="Use24BitAnsi" /> is <see langword="false"/> and this 
         /// is <see langword="true"/> they ARE written in seperate calls because of limitations.
         /// </summary>
-        public bool SeperateLogInfoWriteCalls = false;
+        public bool SeparateLogInfoWriteCalls = false;
 
         /// <summary>
         /// The 16 color <see cref="T:Log73.ColorSchemes.IColorScheme" /> to use when <see cref="Use24BitAnsi" /> is <see langword="false"/>
@@ -119,9 +119,9 @@ namespace Log73
 
         public XmlWriterSettings XmlWriterSettings = new() { Indent = true };
 
-        public ConsoleStyleOptions Style = new();
-
         public bool AlwaysLogTaskStart = false;
+
+        public MessageType WriteLineMessageType = MessageTypes.Info;
         public ConsoleOptions()
         {
 

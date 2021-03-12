@@ -14,6 +14,8 @@ namespace Log73
     public class LogInfoContext
     {
         public object Value { get; internal set; }
+        
+        public string ValueString { get; internal set; }
         public MessageType MessageType { get; internal set; }
 
         internal LogInfoContext() { }

@@ -3,15 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <Version>0.4.2</Version>
+    <Version>0.5.0</Version>
     <Description>A powerful and customizable logging library for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Jan0660</Authors>
     <Company>Jan0660</Company>
     <PackageTags>logging console log73 log</PackageTags>
     <RepositoryUrl>https://github.com/Jan0660/Log73</RepositoryUrl>
-    <PackageVersion>0.4.2</PackageVersion>
-    <PackageReleaseNotes>Hopefully fix logging queue for now.</PackageReleaseNotes>
+    <PackageVersion>0.5.0</PackageVersion>
+    <PackageReleaseNotes>Change Console.Options.DumpLogType to DumpMessageType
+add ValueString to LogInfoContext
+fix typo in Console.Options.SeperateLogInfoWriteCalls to SeparateLogInfoWriteCalls
+add Console.Options.WriteLineMessageType to choose the MessageType used by Console.WriteLine
+add Console.StopwatchTask to measure time it takes for a Func&lt;Task&gt; to execute</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="YamlDotNet" Version="9.1.0" />
   </ItemGroup>

@@ -122,7 +122,7 @@ namespace Log73
         public string GetValue(LogInfoContext context)
         {
             var thread = Thread.CurrentThread;
-            var str = thread.Name == null ? "Unnamed" : thread.Name;
+            var str = thread.Name ?? "Unnamed";
             if (Attributes)
             {
                 str += "\\";

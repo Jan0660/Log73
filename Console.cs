@@ -30,8 +30,23 @@ namespace Log73
         private static TextWriter StdOut = Out.Out;
         private static TextWriter StdErr = Out.Error;
         private static TextReader StdIn = Out.In;
+        private static string _lastKeepMessage = null;
 
         public static ConsoleOptions Options = new ConsoleOptions();
+
+        /// <summary>
+        /// Keeps <paramref name="str"/> at the bottom of your console.
+        /// </summary>
+        /// <param name="str">The string to keep at the bottom of your console. Less than the width of your console.</param>
+        /// <param name="clearPrevious">If you want to overwrite the previous bottom message.</param>
+        public static void AtBottomLog(string str, bool clearPrevious = false)
+        {
+            if(clearPrevious && _lastKeepMessage != null)
+                ClearLastLine();
+            _lastKeepMessage = str;
+            if(str != null)
+                StdOut.WriteLine(str);
+        }
 
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
@@ -216,6 +231,8 @@ namespace Log73
                 msgType.LogType == LogType.Warn
             ))
                 return;
+            if(_lastKeepMessage != null)
+                ClearLastLine();
             var outStream = msgType.WriteToStdErr ? StdErr : StdOut;
             var entireMessage = "";
             // write the LogType
@@ -252,6 +269,8 @@ namespace Log73
                 _writeStyle($"{serialized}\n", msgType.ContentStyle, outStream);
             else
                 outStream.Write(GetStyled($"{entireMessage}{serialized}\n", msgType.ContentStyle));
+            if(_lastKeepMessage != null)
+                outStream.WriteLine(_lastKeepMessage);
         }
         private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
         {
@@ -332,7 +351,7 @@ namespace Log73
         public static void Exception(Exception exception)
         {
             Log(MessageTypes.Error, $@"An exception has occurred: {exception.Message}"
-            + exception.StackTrace == null ? "" : exception.StackTrace + '\n');
+            + (exception.StackTrace == null ? "" : exception.StackTrace + '\n'));
         }
 
         /// <summary>
@@ -384,7 +403,7 @@ namespace Log73
         public static string ReadLine()
             => StdIn.ReadLine();
 
-        public static (int, int) GetCursorPosition()
+        public static (int Left, int Top) GetCursorPosition()
             => (Out.CursorLeft, Out.CursorTop);
 
         public static void SetIn(TextReader textReader)
@@ -407,6 +426,16 @@ namespace Log73
         public static void SetCursorPosition((int, int) position)
             => SetCursorPosition(position.Item1, position.Item2);
 
+        public static void ClearLastLine()
+        {
+            var str = "";
+            for (int i = 0; i < Out.WindowWidth; i++)
+                str += " ";
+            Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
+            Console.Write(str);
+            Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
+        }
+        
         private static string Serialize(this object obj)
         {
             // doesnt work with is

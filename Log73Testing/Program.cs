@@ -14,21 +14,71 @@ namespace Log73Testing
     {
         static async Task Main(string[] args)
         {
-            Console.Options.LogLevel = LogLevel.Debug;
-            //Console.Log("You can");
-            ////MessageTypes.Error.Style.Invert = true;
-            ////MessageTypes.Error.LogInfo.Add(new TimeLogInfo());
-            //Console.Error("log customized messages");
-            //Console.Warn("with Log73!");
-            //Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
             //Console.Info("Info");
             //Console.Warn("Warn");
             Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
-            //Console.Options.Use24BitAnsi = false;
+            Console.Options.UseAnsi = false;
             Console.Options.SeparateLogInfoWriteCalls = true;
             Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
-            Console.Options.SpaceAfterInfo = false;
-            //MessageTypes.Debug.ContentStyle.BackgroundColor = Color.Black;
+            SomeOtherMethod();
+            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysToString;
+            Console.AtBottomLog(null);
+            AtBottomLogs();
+            for (int i = 0; i <= 200; i++)
+            {
+                Console.Log(i);
+                ConsoleProgressBar.Update(i, 200);
+                await Task.Delay(20);
+            }
+
+            await All();
+        }
+
+        static void AtBottomLogs()
+        {
+            // go through this code line by line for *true* immersion
+            Console.Log("There should be `hello` under this line.");
+            Console.AtBottomLog("hello");
+            Console.Log("Now it's under this one!");
+            Console.AtBottomLog("bye", true);
+            Console.Log("Now it's been overwritten by `bye`!");
+            Console.AtBottomLog(null);
+            Console.Log("Now its not kept at the bottom anymore.");
+        }
+
+        static async Task All()
+        {
+            ReadmeBasicExample();
+            ReadmeStyles();
+            ReadmeLogInfos();
+            ObjectSerialization();
+            await ReadmeMessageTypes();
+            AllLogTypes();
+        }
+
+        static void ReadmeBasicExample()
+        {
+            Console.Options.LogLevel = LogLevel.Debug;
+            Console.Log("You can");
+            MessageTypes.Error.Style.Invert = true;
+            MessageTypes.Error.LogInfos.Add(new TimeLogInfo());
+            Console.Error("log customized messages");
+            Console.Warn("with Log73!");
+            Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
+        }
+
+        static void ReadmeStyles()
+        {
+            Console.Error("No styles :(");
+            MessageTypes.Error.Style.Invert = true;
+            MessageTypes.Error.ContentStyle.Color = System.Drawing.Color.Orange;
+            MessageTypes.Error.ContentStyle.Italic = true;
+            MessageTypes.Error.ContentStyle.Underline = true;
+            Console.Error("Look at all this styling!");
+        }
+
+        static void ReadmeLogInfos()
+        {
             MessageTypes.Debug.LogInfos.Add(new CallingMethodLogInfo());
             MessageTypes.Debug.LogInfos.Add(new ThreadLogInfo());
             MessageTypes.Debug.LogInfos.Add(new TimeLogInfo());
@@ -37,28 +87,11 @@ namespace Log73Testing
             MessageTypes.Debug.LogInfos.Add(new NullLogInfo());
             MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo()
                 {Style = new() {Color = System.Drawing.Color.LightPink}});
-            Console.Log(new object());
-            Console.Debug("Debug");
-            MessageTypes.Warn.Name = null;
-            Console.Warn("Warn with null");
-            SomeOtherMethod();
-            "pls be fixed".Dump();
-            await Console.StopwatchTask(() => Task.Delay(100), l => Console.Log(new MessageType()
-            {
-                Name = "Stopwatched",
-                Style = new()
-                {
-                    Color = Color.Blue
-                }
-            }, $"Stopwatched task finished in {l}ms."));
-            Console.Error("No styles :(");
-            MessageTypes.Error.Style.Invert = true;
-            MessageTypes.Error.ContentStyle.Color = System.Drawing.Color.Orange;
-            MessageTypes.Error.ContentStyle.Italic = true;
-            MessageTypes.Error.ContentStyle.Underline = true;
-            Console.Error("Look at all this styling!");
+            Console.Debug("Hello");
+        }
 
-            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysToString;
+        static void ObjectSerialization()
+        {
             Console.Info("Object serialization using ToString by default");
             Console.Info(new DummyObject());
             Console.Info("Object serialization as JSON");
@@ -67,13 +100,25 @@ namespace Log73Testing
             Console.ObjectXml(new DummyObject());
             Console.Info("Object serialization as YAML");
             Console.ObjectYaml(new DummyObject());
-            //12.Dump();
+        }
+
+        static async Task ReadmeMessageTypes()
+        {
             Console.Options.AlwaysLogTaskStart = true;
             MessageTypes.Start.Name = "Begin";
             MessageTypes.Done.Name = "Finished";
             Console.Task("TestSuccessTask", Task.Delay(1000));
             Console.Task("TestErrorTask", Task.Factory.StartNew(() => throw new Exception("exception message")));
             await Task.Delay(2000);
+        }
+
+        static void AllLogTypes()
+        {
+            Console.Options.LogLevel = LogLevel.Debug;
+            foreach (var value in Enum.GetValues<LogType>())
+            {
+                Console.Log(value, value.ToString());
+            }
         }
 
         static async Task TestErrorTask() => throw new Exception("exception message");

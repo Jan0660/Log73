@@ -1,21 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <Version>0.5.0</Version>
+    <Version>0.6.0-preview1</Version>
     <Description>A powerful and customizable logging library for .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Jan0660</Authors>
     <Company>Jan0660</Company>
     <PackageTags>logging console log73 log</PackageTags>
     <RepositoryUrl>https://github.com/Jan0660/Log73</RepositoryUrl>
-    <PackageVersion>0.5.0</PackageVersion>
-    <PackageReleaseNotes>Change Console.Options.DumpLogType to DumpMessageType
-add ValueString to LogInfoContext
-fix typo in Console.Options.SeperateLogInfoWriteCalls to SeparateLogInfoWriteCalls
-add Console.Options.WriteLineMessageType to choose the MessageType used by Console.WriteLine
-add Console.StopwatchTask to measure time it takes for a Func&lt;Task&gt; to execute</PackageReleaseNotes>
+    <PackageVersion>0.6.0-preview1</PackageVersion>
+    <PackageReleaseNotes>add Console.AtBottomLog to keep a line of text at the bottom of your console
+add ConsoleProgressBar for help with displaying progress bars using Console.AtBottomLog</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Log73", "Log73.csproj", "{13786234-F6AD-4E03-AB4B-A7574C869943}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Log73", "src\Log73\Log73.csproj", "{13786234-F6AD-4E03-AB4B-A7574C869943}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Log73Testing", "Log73Testing\Log73Testing.csproj", "{5ACF4507-7554-475C-8A24-00224FCBC215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Log73Testing", "src\Log73Testing\Log73Testing.csproj", "{5ACF4507-7554-475C-8A24-00224FCBC215}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Extensions.Logging", "src\Log73.Extensions.Logging\Log73.Extensions.Logging.csproj", "{5745AC84-04C3-47C1-B831-18F1876E4C64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5ACF4507-7554-475C-8A24-00224FCBC215}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ACF4507-7554-475C-8A24-00224FCBC215}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ACF4507-7554-475C-8A24-00224FCBC215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

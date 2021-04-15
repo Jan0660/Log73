@@ -1,18 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="../../Log73.targets" />
   <PropertyGroup>
+    <AssemblyName>Log73</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
-    <Version>0.6.0-preview1</Version>
     <Description>A powerful and customizable logging library for .NET</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Authors>Jan0660</Authors>
-    <Company>Jan0660</Company>
-    <PackageTags>logging console log73 log</PackageTags>
-    <RepositoryUrl>https://github.com/Jan0660/Log73</RepositoryUrl>
-    <PackageVersion>0.6.0-preview1</PackageVersion>
-    <PackageReleaseNotes>add Console.AtBottomLog to keep a line of text at the bottom of your console
-add ConsoleProgressBar for help with displaying progress bars using Console.AtBottomLog</PackageReleaseNotes>
+    <PackageReleaseNotes>add a LogInfoContext parameter to Console.Log method
+make LogInfoContext constructor public</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

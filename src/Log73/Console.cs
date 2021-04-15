@@ -26,7 +26,7 @@ namespace Log73
     public static class Console
     {
         private static bool _lock = false;
-        private static List<(MessageType msgType, object value)> _logQueue = new();
+        private static List<(MessageType msgType, object value, LogInfoContext context)> _logQueue = new();
         private static TextWriter StdOut = Out.Out;
         private static TextWriter StdErr = Out.Error;
         private static TextReader StdIn = Out.In;
@@ -180,20 +180,21 @@ namespace Log73
         public static void Log(LogType logType, object value)
             => Log(MessageTypes.Get(logType), value);
 
-        public static void Log(MessageType msgType, object value)
+        public static void Log(MessageType msgType, object value, LogInfoContext context = null)
         {
+            context ??= new();
             // a message is currently being logged, add it to the log queue
             if (_lock == true)
             {
                 lock (_logQueue)
                 {
-                    _logQueue.Add((msgType, value));
+                    _logQueue.Add((msgType, value, context));
                 }
                 return;
             }
 
             _lock = true;
-            _log(msgType, value);
+            _log(msgType, value, context);
             // handle the messages in log queue
             _handleLogQueue();
             _lock = false;
@@ -209,7 +210,7 @@ namespace Log73
                 while (true)
                 {
                     var msg = _logQueue[0];
-                    _log(msg.msgType, msg.value);
+                    _log(msg.msgType, msg.value, msg.context);
                     _logQueue.RemoveAt(0);
                     if (_logQueue.Count == 0)
                         return;
@@ -222,7 +223,7 @@ namespace Log73
         /// </summary>
         /// <param name="msgType"></param>
         /// <param name="value"></param>
-        private static void _log(MessageType msgType, object value)
+        private static void _log(MessageType msgType, object value, LogInfoContext context)
         {
             if (msgType.LogType == LogType.Debug && Options.LogLevel != LogLevel.Debug)
                 return;
@@ -247,14 +248,12 @@ namespace Log73
 
             var serialized = value.Serialize();
             // write log infos
-            var logInfoContext = new LogInfoContext
-            {
-                Value = value, MessageType = msgType,
-                ValueString = serialized
-            };
+            context.Value = value;
+            context.MessageType = msgType;
+            context.ValueString = serialized;
             foreach (var extra in msgType.LogInfos)
             {
-                var val = extra.GetValue(logInfoContext);
+                var val = extra.GetValue(context);
                 if (val == null)
                     continue;
                 if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)

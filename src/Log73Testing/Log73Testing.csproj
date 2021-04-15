@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Log73.Extensions.Logging\Log73.Extensions.Logging.csproj" />
     <ProjectReference Include="..\Log73\Log73.csproj" />
   </ItemGroup>
 

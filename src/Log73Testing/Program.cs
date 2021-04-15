@@ -7,11 +7,24 @@ using Out = System.Console;
 using Log73;
 using Log73.ColorSchemes;
 using Log73.ExtensionMethod;
+using Log73.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using LogLevel = Log73.LogLevel;
 
 namespace Log73Testing
 {
     public class Program
     {
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .ConfigureLogging(builder =>
+                {
+                    builder.ClearProviders();
+                    builder.AddLog73Logger();
+                });
         static async Task Main(string[] args)
         {
             //Console.Info("Info");
@@ -24,14 +37,16 @@ namespace Log73Testing
             Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysToString;
             Console.AtBottomLog(null);
             AtBottomLogs();
-            for (int i = 0; i <= 200; i++)
+            for (int i = 0; i <= 70; i++)
             {
                 Console.Log(i);
-                ConsoleProgressBar.Update(i, 200);
-                await Task.Delay(20);
+                ConsoleProgressBar.Update(i, 70);
+                await Task.Delay(15);
             }
+            Console.AtBottomLog(null);
 
             await All();
+            CreateHostBuilder(args).Build().Run();
         }
 
         static void AtBottomLogs()

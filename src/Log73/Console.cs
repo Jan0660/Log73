@@ -1,5 +1,5 @@
 ﻿using System;
-using Out = System.Console;
+using SConsole = System.Console;
 using OSM = Log73.ConsoleOptions.ObjectSerializationMethod;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using Log73.ExtensionMethod;
 using System.Diagnostics;
+using System.Text;
 
 namespace Log73
 {
@@ -27,12 +28,144 @@ namespace Log73
     {
         private static bool _lock = false;
         private static List<(MessageType msgType, object value, LogInfoContext context)> _logQueue = new();
-        private static TextWriter StdOut = Out.Out;
-        private static TextWriter StdErr = Out.Error;
-        private static TextReader StdIn = Out.In;
+        private static TextWriter Out = SConsole.Out;
+        private static TextWriter Err = SConsole.Error;
+        private static TextReader In = SConsole.In;
         private static string _lastKeepMessage = null;
-
         public static ConsoleOptions Options = new ConsoleOptions();
+
+        #region System.Console compatibility properties
+
+        /// <inheritdoc cref="System.Console.Title"/>
+        public static string Title
+        {
+            get => SConsole.Title;
+            set => SConsole.Title = value;
+        }
+
+        /// <inheritdoc cref="System.Console.BufferHeight"/>
+        public static int BufferHeight
+        {
+            get => SConsole.BufferHeight;
+            set => SConsole.BufferHeight = value;
+        }
+
+        /// <inheritdoc cref="System.Console.BufferWidth"/>
+        public static int BufferWidth
+        {
+            get => SConsole.BufferWidth;
+            set => SConsole.BufferWidth = value;
+        }
+
+        /// <inheritdoc cref="System.Console.CapsLock"/>
+        public static bool CapsLock => SConsole.CapsLock;
+
+        /// <inheritdoc cref="System.Console.CursorLeft"/>
+        public static int CursorLeft
+        {
+            get => SConsole.CursorLeft;
+            set => SConsole.CursorLeft = value;
+        }
+
+        /// <inheritdoc cref="System.Console.CursorSize"/>
+        public static int CursorSize
+        {
+            get => SConsole.CursorSize;
+            set => SConsole.CursorSize = value;
+        }
+
+        /// <inheritdoc cref="System.Console.CursorTop"/>
+        public static int CursorTop
+        {
+            get => SConsole.CursorTop;
+            set => SConsole.CursorTop = value;
+        }
+
+        /// <inheritdoc cref="System.Console.CursorVisible"/>
+        public static bool CursorVisible
+        {
+            get => SConsole.CursorVisible;
+            set => SConsole.CursorVisible = value;
+        }
+
+        /// <inheritdoc cref="System.Console.InputEncoding"/>
+        public static Encoding InputEncoding
+        {
+            get => SConsole.InputEncoding;
+            set => SConsole.InputEncoding = value;
+        }
+
+        /// <inheritdoc cref="System.Console.KeyAvailable"/>
+        public static bool KeyAvailable => SConsole.KeyAvailable;
+
+        /// <inheritdoc cref="System.Console.NumberLock"/>
+        public static bool NumberLock => SConsole.NumberLock;
+
+        /// <inheritdoc cref="System.Console.OutputEncoding"/>
+        public static Encoding OutputEncoding
+        {
+            get => SConsole.OutputEncoding;
+            set => SConsole.OutputEncoding = value;
+        }
+
+        /// <inheritdoc cref="System.Console.WindowHeight"/>
+        public static int WindowHeight
+        {
+            get => SConsole.WindowHeight;
+            set => SConsole.WindowHeight = value;
+        }
+
+        /// <inheritdoc cref="System.Console.WindowLeft"/>
+        public static int WindowLeft
+        {
+            get => SConsole.WindowLeft;
+            set => SConsole.WindowLeft = value;
+        }
+
+        /// <inheritdoc cref="System.Console.WindowTop"/>
+        public static int WindowTop
+        {
+            get => SConsole.WindowTop;
+            set => SConsole.WindowTop = value;
+        }
+
+        /// <inheritdoc cref="System.Console.WindowWidth"/>
+        public static int WindowWidth
+        {
+            get => SConsole.WindowWidth;
+            set => SConsole.WindowWidth = value;
+        }
+
+        /// <inheritdoc cref="System.Console.IsErrorRedirected"/>
+        public static bool IsErrorRedirected => SConsole.IsErrorRedirected;
+
+        /// <inheritdoc cref="System.Console.IsInputRedirected"/>
+        public static bool IsInputRedirected => SConsole.IsInputRedirected;
+
+        /// <inheritdoc cref="System.Console.IsOutputRedirected"/>
+        public static bool IsOutputRedirected => SConsole.IsOutputRedirected;
+
+        /// <inheritdoc cref="System.Console.LargestWindowHeight"/>
+        public static int LargerWindowHeight => SConsole.LargestWindowHeight;
+
+        /// <inheritdoc cref="System.Console.LargestWindowWidth"/>
+        public static int LargerWindowWidth => SConsole.LargestWindowWidth;
+
+        /// <inheritdoc cref="System.Console.TreatControlCAsInput"/>
+        public static bool TreatControlCAsInput
+        {
+            get => SConsole.TreatControlCAsInput;
+            set => SConsole.TreatControlCAsInput = value;
+        }
+
+        /// <inheritdoc cref="System.Console.CancelKeyPress"/>
+        public static event ConsoleCancelEventHandler? CancelKeyPress
+        {
+            add => SConsole.CancelKeyPress += value;
+            remove => SConsole.CancelKeyPress -= value;
+        }
+
+        #endregion
 
         /// <summary>
         /// Keeps <paramref name="str"/> at the bottom of your console.
@@ -41,11 +174,11 @@ namespace Log73
         /// <param name="clearPrevious">If you want to overwrite the previous bottom message.</param>
         public static void AtBottomLog(string str, bool clearPrevious = false)
         {
-            if(clearPrevious && _lastKeepMessage != null)
+            if (clearPrevious && _lastKeepMessage != null)
                 ClearLastLine();
             _lastKeepMessage = str;
-            if(str != null)
-                StdOut.WriteLine(str);
+            if (str != null)
+                Out.WriteLine(str);
         }
 
         /// <summary>
@@ -61,9 +194,10 @@ namespace Log73
             => Write('\n');
 
         public static void Write(object value)
-            => StdOut.Write(value.Serialize());
+            => Out.Write(value.Serialize());
 
         #region Info, Warn, Error, Debug + ObjectX methods
+
         /// <summary>
         /// Logs the <paramref name="value"/> using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
@@ -97,6 +231,7 @@ namespace Log73
         /// </summary>
         public static void ObjectJson(object obj)
             => ObjectJson(MessageTypes.Info, obj);
+
         /// <summary>
         /// Logs the <paramref name="value"/> serialized as JSON using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
         /// </summary>
@@ -146,6 +281,7 @@ namespace Log73
         {
             Log(msgType, obj.SerializeAsYaml());
         }
+
         #endregion
 
         public static void Task(string name, Task task)
@@ -190,6 +326,7 @@ namespace Log73
                 {
                     _logQueue.Add((msgType, value, context));
                 }
+
                 return;
             }
 
@@ -232,9 +369,9 @@ namespace Log73
                 msgType.LogType == LogType.Warn
             ))
                 return;
-            if(_lastKeepMessage != null)
+            if (_lastKeepMessage != null)
                 ClearLastLine();
-            var outStream = msgType.WriteToStdErr ? StdErr : StdOut;
+            var outStream = msgType.WriteToStdErr ? Err : Out;
             var entireMessage = "";
             // write the LogType
             if (msgType.Name != null)
@@ -263,14 +400,16 @@ namespace Log73
                     entireMessage += _getStyledAsLogInfo(val, extra.Style);
                 }
             }
+
             // write the actual message
             if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
                 _writeStyle($"{serialized}\n", msgType.ContentStyle, outStream);
             else
                 outStream.Write(GetStyled($"{entireMessage}{serialized}\n", msgType.ContentStyle));
-            if(_lastKeepMessage != null)
+            if (_lastKeepMessage != null)
                 outStream.WriteLine(_lastKeepMessage);
         }
+
         private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
         {
             str = Options.UseBrackets ? $"[{str}]" : str;
@@ -279,6 +418,7 @@ namespace Log73
                 stri += ' ';
             return stri;
         }
+
         /// <summary>
         /// Writes a string to <see cref="StdOut"/> with color using <see cref="System.Console.ForegroundColor"/> and <see cref="System.Console.BackgroundColor"/>
         /// </summary>
@@ -286,23 +426,25 @@ namespace Log73
         /// <param name="style"></param>
         private static void _writeBasicColored(string str, ConsoleStyleOption style, TextWriter writer)
         {
-            var prevForegroundColor = Out.ForegroundColor;
-            var prevBackgroundColor = Out.BackgroundColor;
+            var prevForegroundColor = SConsole.ForegroundColor;
+            var prevBackgroundColor = SConsole.BackgroundColor;
             if (style.Color != null)
             {
                 var match = Ansi.BestMatch(style.Color.Value, Options.ColorScheme);
                 var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
-                Out.ForegroundColor = con;
+                SConsole.ForegroundColor = con;
             }
+
             if (style.BackgroundColor != null)
             {
                 var match = Ansi.BestMatch(style.BackgroundColor.Value, Options.ColorScheme);
                 var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
-                Out.BackgroundColor = con;
+                SConsole.BackgroundColor = con;
             }
+
             writer.Write(str);
-            Out.ForegroundColor = prevForegroundColor;
-            Out.BackgroundColor = prevBackgroundColor;
+            SConsole.ForegroundColor = prevForegroundColor;
+            SConsole.BackgroundColor = prevBackgroundColor;
         }
 
         private static void _writeStyle(object value, ConsoleStyleOption style, TextWriter writer)
@@ -350,7 +492,7 @@ namespace Log73
         public static void Exception(Exception exception)
         {
             Log(MessageTypes.Error, $@"An exception has occurred: {exception.Message}"
-            + (exception.StackTrace == null ? "" : exception.StackTrace + '\n'));
+                                    + (exception.StackTrace == null ? "" : exception.StackTrace + '\n'));
         }
 
         /// <summary>
@@ -366,58 +508,59 @@ namespace Log73
         }
 
         #region System.Console compatibility
+
         /// <inheritdoc cref="System.Console.Beep"/>
         public static void Beep()
-            => Out.Beep();
+            => SConsole.Beep();
 
         /// <inheritdoc cref="System.Console.Beep(int, int)"/>
         public static void Beep(int frequency, int duration)
-            => Out.Beep(frequency, duration);
+            => SConsole.Beep(frequency, duration);
 
         /// <inheritdoc cref="System.Console.Clear"/>
         public static void Clear()
-            => Out.Clear();
+            => SConsole.Clear();
 
         /// <inheritdoc cref="System.Console.SetWindowSize(int, int)"/>
         public static void SetWindowSize(int width, int height)
-            => Out.SetWindowSize(width, height);
+            => SConsole.SetWindowSize(width, height);
 
         /// <inheritdoc cref="System.Console.SetCursorPosition(int, int)"/>
         public static void SetCursorPosition(int left, int top)
-            => Out.SetCursorPosition(left, top);
+            => SConsole.SetCursorPosition(left, top);
 
         /// <inheritdoc cref="System.Console.SetBufferSize(int, int)"/>
         public static void SetBufferSize(int width, int height)
-            => Out.SetBufferSize(width, height);
+            => SConsole.SetBufferSize(width, height);
 
         /// <inheritdoc cref="System.Console.ResetColor"/>
         public static void ResetColor()
-            => Out.ResetColor();
+            => SConsole.ResetColor();
 
         /// <inheritdoc cref="TextReader.Read"/>
         public static int Read()
-            => StdIn.Read();
+            => In.Read();
 
         /// <inheritdoc cref="TextReader.ReadLine"/>
         public static string ReadLine()
-            => StdIn.ReadLine();
+            => In.ReadLine();
 
         public static (int Left, int Top) GetCursorPosition()
-            => (Out.CursorLeft, Out.CursorTop);
+            => (SConsole.CursorLeft, SConsole.CursorTop);
 
         public static void SetIn(TextReader textReader)
         {
-            StdIn = textReader ?? throw new ArgumentNullException(nameof(textReader));
+            In = textReader ?? throw new ArgumentNullException(nameof(textReader));
         }
 
         public static void SetOut(TextWriter textWriter)
         {
-            StdOut = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
+            Out = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
         }
 
         public static void SetError(TextWriter textWriter)
         {
-            StdErr = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
+            Err = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
         }
 
         #endregion
@@ -428,13 +571,13 @@ namespace Log73
         public static void ClearLastLine()
         {
             var str = "";
-            for (int i = 0; i < Out.WindowWidth; i++)
+            for (int i = 0; i < SConsole.WindowWidth; i++)
                 str += " ";
             Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
             Console.Write(str);
             Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
         }
-        
+
         private static string Serialize(this object obj)
         {
             // doesnt work with is
@@ -445,7 +588,7 @@ namespace Log73
             }
             else
             {
-                if ((int)Options.ObjectSerialization % (int)2 == 1)
+                if ((int) Options.ObjectSerialization % (int) 2 == 1)
                 {
                     // check if ToString is overriden
                     // todo: probly not best way of doing this

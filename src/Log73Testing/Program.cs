@@ -9,6 +9,7 @@ using Log73.ColorSchemes;
 using Log73.ExtensionMethod;
 using Log73.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using LogLevel = Log73.LogLevel;

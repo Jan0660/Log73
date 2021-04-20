@@ -25,12 +25,12 @@ Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
 # Table of contents
 
 1. [Using Ansi](#ansi)
-2. [LogTypes and LogLevels](#LogTypes%20and%20LogLevels)
+2. [LogTypes and LogLevels](#logtypes-and-loglevels)
 3. [Styling](#styling)
 4. [Message Types](#message-types)
 5. [LogInfos](#loginfos)
-6. [Progress Bars](#Progress%20Bars)
-6. [Use with ASP.NET](#Use%20with%20ASP.NET)
+6. [Progress Bars](#progress-bars)
+6. [Use with ASP.NET](#use-with-aspnet)
 
 ## Ansi
 

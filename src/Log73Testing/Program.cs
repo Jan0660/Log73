@@ -21,10 +21,21 @@ namespace Log73Testing
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                // Add Log73 logging
                 .ConfigureLogging(builder =>
                 {
                     builder.ClearProviders();
-                    builder.AddLog73Logger();
+                    builder.AddLog73Logger(config =>
+                    {
+                        config.LogLevel = Microsoft.Extensions.Logging.LogLevel.Debug;
+                        foreach (var msgType in config.MessageTypesAsArray())
+                        {
+                            msgType.Style = new()
+                            {
+                                ToUpper = false
+                            };
+                        }
+                    });
                 });
         static async Task Main(string[] args)
         {

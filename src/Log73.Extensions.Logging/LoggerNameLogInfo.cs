@@ -2,6 +2,9 @@
 
 namespace Log73.Extensions.Logging
 {
+    /// <summary>
+    /// Provides the Name in a <see cref="Log73Logger"/>. Accepts <see cref="LoggerLogInfoContext"/>.
+    /// </summary>
     public class LoggerNameLogInfo: ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new()

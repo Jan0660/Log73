@@ -2,11 +2,16 @@
 
 namespace Log73
 {
+    /// <summary>
+    /// Provides progress bars in Log73.
+    /// </summary>
     public static class ConsoleProgressBar
     {
         public static char FilledCharacter = '#';
         public static char EmptyCharacter = ' ';
 
+        /// <param name="current">Must be less than or equal to <paramref name="max"/></param>
+        /// <param name="max"></param>
         public static void Update(int current, int max)
         {
             int width = System.Console.WindowWidth - 1;

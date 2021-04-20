@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging.Configuration;
 
 namespace Log73.Extensions.Logging
 {
+    /// <summary>
+    /// Extensions for <see cref="ILoggingBuilder"/>.
+    /// </summary>
     public static class Log73LoggerExtensions
     {
         public static ILoggingBuilder AddLog73Logger(

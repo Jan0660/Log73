@@ -5,8 +5,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Description>A powerful and customizable logging library for .NET</Description>
-    <PackageReleaseNotes>add a LogInfoContext parameter to Console.Log method
-make LogInfoContext constructor public</PackageReleaseNotes>
+    <PackageReleaseNotes>Add keeping message at bottom of console using Console.AtBottomLog
+Add a simple progress bar using Console.AtBottomLog: ConsoleProgressBar
+Companion package for ASP.NET logging: Log73.Extensions.Logging</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

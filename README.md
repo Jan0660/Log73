@@ -1,6 +1,7 @@
 # Log73
 [![NuGet](https://img.shields.io/nuget/v/Log73)](https://www.nuget.org/packages/Log73/)
-[![Prerelease](https://img.shields.io/nuget/vpre/Log73)](https://www.nuget.org/packages/Log73/)
+[![NuGet Prerelease](https://img.shields.io/nuget/vpre/Log73)](https://www.nuget.org/packages/Log73/)
+[![chat on discord](https://img.shields.io/discord/749601186155462748?logo=discord)](https://discord.gg/zBbV56e)
 
 #### A powerful and customizable .NET logging library
 
@@ -28,10 +29,12 @@ Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
 3. [Styling](#styling)
 4. [Message Types](#message-types)
 5. [LogInfos](#loginfos)
+6. [Progress Bars](#Progress%20Bars)
+6. [Use with ASP.NET](#Use%20with%20ASP.NET)
 
 ## Ansi
 
-All of the styling options are made possible thanks to [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code). Your terminal might not support them and your console will look like this: 
+All of the styling options are made possible thanks to [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code). Your terminal might not support them and your console will look like this:
 
 ![visual representation of pain when rider somehow disables ansi on windows](https://i.imgur.com/uUreBii.png)
 
@@ -77,7 +80,7 @@ A `LogType` basically determines whether or not a message will be logged accordi
 
 ## Styling
 
-You can also customize the default styles for the default `MessageType`s, by changing color or enabling ANSI escape codes. (all of the colors/ANSI codes might not be supported in all terminals)
+You can also customize the default styles for the default `MessageType`s, by changing color or enabling ANSI escape codes. Please note that all of the colors/ANSI codes might not be supported in all terminal emulators.
 
 ```csharp
 Console.Error("No styles :(");
@@ -113,7 +116,7 @@ static async Task TestErrorTask() => throw new Exception("exception message");
 static async Task TestSuccessTask() => await Task.Delay(1000);
 ```
 
-![msgtype](https://i.imgur.com/pR63J3H.png)
+![original MessageTypes](https://i.imgur.com/pR63J3H.png)
 
 If you like the words "Begin" and "Finished" more you can change them!
 
@@ -125,7 +128,7 @@ Console.Task("TestSuccessTask", TestSuccessTask());
 Console.Task("TestErrorTask", TestErrorTask());
 ```
 
-![msgtype](https://i.imgur.com/T21fobE.png)
+![edited MessageTypes](https://i.imgur.com/T21fobE.png)
 ## LogInfos
 `LogInfo`s are a way to add extra information to a `MessageType` that is logged. You can either use the ones that come with Log73 by default or create your own by inheriting from the `IlogInfo` interface. You add it onto a `MessageType` like so:
 
@@ -137,7 +140,7 @@ TIP: use the `MessageTypes.AsArray` method to get the default `MessageType`s as 
 
 Here's an example of how they look like:
 
-![hh](https://i.imgur.com/ysLr5MN.png)
+![too many loginfos](https://i.imgur.com/ysLr5MN.png)
 
 They can also be styled using the `Style` property. Log73 comes with the following `LogInfos` by default:
 
@@ -152,3 +155,47 @@ They can also be styled using the `Style` property. Log73 comes with the followi
 
 \* When used in async or anonymous method scenarios they have problem getting the stack frame and will appear as `Unable to get <>` when they cannot do so.
 
+# Progress Bars
+Another thing Log73 can do is write text and keep it at the bottom of your console, which can be used for progress bars!
+```csharp
+// write text to be kept at bottom of console
+Console.AtBottomLog("Text kept at bottom.");
+Console.WriteLine("Wow it works, cool.");
+for (int i = 0; i <= 70; i++)  
+{  
+	Console.Log(i);  
+	ConsoleProgressBar.Update(i, 70);  
+	System.Threading.Thread.Sleep(25);  
+}
+// don't keep the progress bar at bottom of console
+Console.AtBottomLog(null);
+```
+
+# Use with ASP.NET
+For using Log73 with ASP.NET you need to install the [Log73.Extensions.Logging](https://nuget.org/packages/Log73.Extensions.Logging/) package.
+Now you only need to add it in your  `CreateHostBuilder` method like so:
+```csharp
+using Log73.Extensions.Logging;
+
+public static IHostBuilder CreateHostBuilder(string[] args) =>
+	Host.CreateDefaultBuilder(args)
+		.ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>(); })
+		// Add Log73 logging
+		.ConfigureLogging(builder =>
+			{
+				builder.ClearProviders();
+				builder.AddLog73Logger();
+            });
+```
+Currently the ASP.NET logger forces `Log73.LogLevel.Error`, since configuring the LogLevel is done by configuration in the `AddLog73Logger` method like so:
+```csharp
+builder.AddLog73Logger(config =>
+	{
+		config.LogLevel = Microsoft.Extensions.Logging.LogLevel.Debug;
+		// + configure the MessageTypes used by the logger!
+		foreach(var msgType in config.MessageTypesAsArray())
+		{
+			msgType.Style = new() { ToUpper = false };
+		}
+	});
+```

@@ -2,7 +2,7 @@
     <Import Project="../../Log73.targets" />
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <Description>Extensions for using Log73 with ASP.Net logging</Description>
     </PropertyGroup>
 

@@ -1,17 +1,11 @@
 ﻿using System;
 using SConsole = System.Console;
-using OSM = Log73.ConsoleOptions.ObjectSerializationMethod;
-using System.Drawing;
 using System.Threading.Tasks;
-using System.Threading;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.IO;
-using System.Xml.Serialization;
-using System.Xml;
 using Log73.ExtensionMethod;
 using System.Diagnostics;
-using System.Text;
+using Log73.Extensible;
 
 namespace Log73
 {
@@ -33,6 +27,7 @@ namespace Log73
         private static TextReader In = SConsole.In;
         private static string _lastKeepMessage = null;
         public static ConsoleOptions Options = new ConsoleOptions();
+        public static readonly ConsoleLogObject Object = new();
 
         /// <summary>
         /// Keeps <paramref name="str"/> at the bottom of your console.
@@ -61,7 +56,7 @@ namespace Log73
             => Write('\n');
 
         public static void Write(object value)
-            => Out.Write(value.Serialize());
+            => Out.Write(value.SerializeObject());
 
         #region Info, Warn, Error, Debug + ObjectX methods
 
@@ -94,24 +89,6 @@ namespace Log73
             => Log(MessageTypes.Debug, value);
 
         /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as JSON using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
-        /// </summary>
-        public static void ObjectJson(object obj)
-            => ObjectJson(MessageTypes.Info, obj);
-
-        /// <summary>
-        /// Logs the <paramref name="value"/> serialized as JSON using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
-        /// </summary>
-        public static void ObjectJson(LogType logType, object obj)
-            => ObjectJson(MessageTypes.Get(logType), obj);
-
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as JSON using the specified <see cref="MessageType"/>.
-        /// </summary>
-        public static void ObjectJson(MessageType msgType, object obj)
-            => Log(msgType, obj.SerializeAsJson());
-
-        /// <summary>
         /// Logs the <paramref name="obj"/> serialized as XML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
         /// </summary>
         public static void ObjectXml(object obj)
@@ -128,26 +105,6 @@ namespace Log73
         /// </summary>
         public static void ObjectXml(MessageType msgType, object obj)
             => Log(msgType, obj.SerializeAsXml());
-
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as YAML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
-        /// </summary>
-        public static void ObjectYaml(object obj)
-            => ObjectYaml(MessageTypes.Info, obj);
-
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as YAML using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
-        /// </summary>
-        public static void ObjectYaml(LogType logType, object obj)
-            => ObjectYaml(MessageTypes.Get(logType), obj);
-
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as YAML using the specified <see cref="MessageType"/>.
-        /// </summary>
-        public static void ObjectYaml(MessageType msgType, object obj)
-        {
-            Log(msgType, obj.SerializeAsYaml());
-        }
 
         #endregion
 
@@ -250,7 +207,7 @@ namespace Log73
                     entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
             }
 
-            var serialized = value.Serialize();
+            var serialized = value.SerializeObject();
             // write log infos
             context.Value = value;
             context.MessageType = msgType;
@@ -387,39 +344,25 @@ namespace Log73
             Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
         }
 
-        private static string Serialize(this object obj)
+        private static string SerializeObject(this object obj)
         {
             // doesnt work with is
             // ReSharper disable once OperatorIsCanBeUsed
-            if (obj.IsValueType() | obj.GetType() == typeof(string))
+            var type = obj?.GetType();
+            if ((type?.IsPrimitive ?? false) || type == typeof(string))
             {
-                return obj.ToString();
+                return obj?.ToString();
             }
             else
             {
-                if ((int) Options.ObjectSerialization % (int) 2 == 1)
+                // check if ToString is overriden
+                if (type?.GetMethod("ToString")?.DeclaringType != typeof(object))
                 {
-                    // check if ToString is overriden
-                    // todo: probly not best way of doing this
-                    if (obj.ToString() != obj.GetType().ToString())
-                    {
-                        // ToString is overriden
-                        return obj.ToString();
-                    }
+                    // ToString is overriden
+                    return obj?.ToString();
                 }
 
-                return Options.ObjectSerialization switch
-                {
-                    OSM.AlwaysToString => obj.ToString(),
-                    OSM.Json => obj.SerializeAsJson(),
-                    OSM.AlwaysJson => obj.SerializeAsJson(),
-                    OSM.Xml => obj.SerializeAsXml(),
-                    OSM.AlwaysXml => obj.SerializeAsXml(),
-                    OSM.Yaml => obj.SerializeAsYaml(),
-                    OSM.AlwaysYaml => obj.SerializeAsYaml(),
-                    _ => throw new Exception("invalid Options.ObjectSerialization")
-                };
-                throw new Exception("invalid Options.ObjectSerialization");
+                return Options.ObjectSerializer.Serialize(obj);
             }
         }
     }

@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Log73.Extensions.YamlDotNet\Log73.Extensions.YamlDotNet.csproj" />
     <ProjectReference Include="..\Log73.Extensions.Logging\Log73.Extensions.Logging.csproj" />
+    <ProjectReference Include="..\Log73.Extensions.NewtonsoftJson\Log73.Extensions.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\Log73\Log73.csproj" />
   </ItemGroup>
 

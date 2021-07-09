@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Log73Testing", "src\Log73Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Extensions.Logging", "src\Log73.Extensions.Logging\Log73.Extensions.Logging.csproj", "{5745AC84-04C3-47C1-B831-18F1876E4C64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Extensions.NewtonsoftJson", "src\Log73.Extensions.NewtonsoftJson\Log73.Extensions.NewtonsoftJson.csproj", "{589B9050-6129-4E38-BC3D-42BB62AF0C15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Extensions.YamlDotNet", "src\Log73.Extensions.YamlDotNet\Log73.Extensions.YamlDotNet.csproj", "{17C6117B-DFED-4619-B90E-7414A7EA6C30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5745AC84-04C3-47C1-B831-18F1876E4C64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589B9050-6129-4E38-BC3D-42BB62AF0C15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589B9050-6129-4E38-BC3D-42BB62AF0C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589B9050-6129-4E38-BC3D-42BB62AF0C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589B9050-6129-4E38-BC3D-42BB62AF0C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17C6117B-DFED-4619-B90E-7414A7EA6C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17C6117B-DFED-4619-B90E-7414A7EA6C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17C6117B-DFED-4619-B90E-7414A7EA6C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17C6117B-DFED-4619-B90E-7414A7EA6C30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,6 @@ using System.Text;
 using System.Drawing;
 using System.Xml;
 using Log73.ColorSchemes;
-using Newtonsoft.Json;
 
 namespace Log73
 {
@@ -28,46 +27,8 @@ namespace Log73
         public LogLevel LogLevel = LogLevel.Standard;
 
         public MessageType DumpMessageType = MessageTypes.Info;
-        [Flags]
-        public enum ObjectSerializationMethod
-        {
-            /// <summary>
-            /// Always uses .ToString(), even if it is not overriden
-            /// </summary>
-            AlwaysToString = 0,
-            /// <summary>
-            /// Uses .ToString() if it is overriden
-            /// </summary>
-            OverridenToString = 1,
-            /// <summary>
-            /// Always uses Json
-            /// </summary>
-            AlwaysJson = 2,
-            /// <summary>
-            /// Uses .ToString() if it is overriden, otherwise uses Json
-            /// </summary>
-            Json = 3,
-            /// <summary>
-            /// Always uses Xml
-            /// </summary>
-            AlwaysXml = 4,
-            /// <summary>
-            /// Uses .ToString() if it is overriden, otherwise uses Xml
-            /// </summary>
-            Xml = 5,
-            /// <summary>
-            /// Always uses Yaml
-            /// </summary>
-            AlwaysYaml = 8,
-            /// <summary>
-            /// Uses .ToString() if it is overriden, otherwise uses Yaml
-            /// </summary>
-            Yaml = 9
-        }
-        /// <summary>
-        /// The method of object serialization to use when logging a non-value type
-        /// </summary>
-        public ObjectSerializationMethod ObjectSerialization = ObjectSerializationMethod.AlwaysToString;
+
+        public IObjectSerializer ObjectSerializer = new ToStringSerializer();
 
         /// <summary>
         /// If <see langword="true"/> there are brackets ('[' and ']') around an <see cref="ILogInfo"/>'s value and the message's <see cref="LogType"/>.
@@ -111,11 +72,6 @@ namespace Log73
         /// </summary>
 
         public IColorScheme ColorScheme = new WindowsConsoleColorScheme();
-
-        public JsonSerializerSettings JsonSerializerSettings = new()
-        {
-            Formatting = Newtonsoft.Json.Formatting.Indented
-        };
 
         public XmlWriterSettings XmlWriterSettings = new() { Indent = true };
 

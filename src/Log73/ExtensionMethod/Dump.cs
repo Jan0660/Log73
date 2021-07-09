@@ -35,10 +35,5 @@ namespace Log73.ExtensionMethod
         /// <inheritdoc cref="Log73.Console.Task(string, Task)"/>
         public static void DumpTask(this Task task, string name)
             => Console.Task(name, task);
-
-        internal static bool IsValueType(this object obj)
-        {
-            return obj != null && obj.GetType().IsValueType;
-        }
     }
 }

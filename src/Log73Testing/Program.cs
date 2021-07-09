@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Threading;
 using System.Threading.Tasks;
 using Console = Log73.Console;
 using Out = System.Console;
@@ -8,8 +6,9 @@ using Log73;
 using Log73.ColorSchemes;
 using Log73.ExtensionMethod;
 using Log73.Extensions.Logging;
+using Log73.Extensions.NewtonsoftJson;
+using Log73.Extensions.YamlDotNet;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using LogLevel = Log73.LogLevel;
@@ -41,12 +40,12 @@ namespace Log73Testing
         {
             //Console.Info("Info");
             //Console.Warn("Warn");
-            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysJson;
+            Console.Options.ObjectSerializer = new NewtonsoftJsonSerializer();
             Console.Options.UseAnsi = false;
             Console.Options.SeparateLogInfoWriteCalls = true;
             Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
             SomeOtherMethod();
-            Console.Options.ObjectSerialization = ConsoleOptions.ObjectSerializationMethod.AlwaysToString;
+            Console.Options.ObjectSerializer = new ToStringSerializer();
             Console.AtBottomLog(null);
             AtBottomLogs();
             for (int i = 0; i <= 70; i++)
@@ -91,7 +90,7 @@ namespace Log73Testing
             MessageTypes.Error.LogInfos.Add(new TimeLogInfo());
             Console.Error("log customized messages");
             Console.Warn("with Log73!");
-            Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
+            Console.Object.Yaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
         }
 
         static void ReadmeStyles()
@@ -122,11 +121,11 @@ namespace Log73Testing
             Console.Info("Object serialization using ToString by default");
             Console.Info(new DummyObject());
             Console.Info("Object serialization as JSON");
-            Console.ObjectJson(new DummyObject());
+            Console.Object.Json(new DummyObject());
             Console.Info("Object serialization as XML");
             Console.ObjectXml(new DummyObject());
             Console.Info("Object serialization as YAML");
-            Console.ObjectYaml(new DummyObject());
+            Console.Object.Yaml(new DummyObject());
         }
 
         static async Task ReadmeMessageTypes()

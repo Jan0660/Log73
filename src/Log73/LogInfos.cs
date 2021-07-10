@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Drawing;
 using System.Diagnostics;
-using System.Reflection;
+using System.Drawing;
+using System.Threading;
 
 namespace Log73
 {
     public class TimeLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.Magenta};
+        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.Gold };
 
         public string TimeFormat = "hh:mm:ss";
 
@@ -18,10 +15,7 @@ namespace Log73
         {
         }
 
-        public TimeLogInfo(string timeFormat)
-        {
-            TimeFormat = timeFormat;
-        }
+        public TimeLogInfo(string timeFormat) => TimeFormat = timeFormat;
 
         public string GetValue(LogInfoContext context)
             => $"{DateTime.Now.ToString(TimeFormat)}";
@@ -29,7 +23,7 @@ namespace Log73
 
     public class CallingMethodLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
+        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = true;
         public string UnableToGet = "Unable to get method";
 
@@ -54,14 +48,11 @@ namespace Log73
         /// <exception cref="T:System.Exception">If fails to get the caller <see cref="StackFrame"/> an exception is thrown.</exception>
         public static StackFrame GetCallerFrame()
         {
-            var h = new StackTrace();
-            var frames = h.GetFrames();
             var log73 = typeof(Console).Assembly;
-            foreach (var frame in frames)
+            foreach (var frame in new StackTrace().GetFrames())
             {
-                if (frame.GetMethod().DeclaringType.Assembly != log73)
+                if (frame.GetMethod().DeclaringType?.Assembly != log73)
                 {
-                    var ass = frame.GetMethod().DeclaringType.Assembly;
                     if (frame.GetMethod().Module.Name == "System.Private.CoreLib.dll")
                         continue;
                     if (frame.GetMethod().Name == "MoveNext")
@@ -76,7 +67,7 @@ namespace Log73
 
     public class CallingClassLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
+        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = true;
         public string UnableToGet = "Unable to get class";
 
@@ -96,7 +87,7 @@ namespace Log73
 
     public class CallingModuleLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
+        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool FullName = false;
         public string UnableToGet = "Unable to get module";
 
@@ -116,7 +107,7 @@ namespace Log73
 
     public class ThreadLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
+        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
         public bool Attributes = true;
 
         public string GetValue(LogInfoContext context)
@@ -136,7 +127,11 @@ namespace Log73
 
     public class TypeLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() {Color = Color.HotPink};
+        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+
+        /// <summary>
+        /// For example: If true, returns "Log73.TypeLogInfo". If false, returns "TypeLogInfo"
+        /// </summary>
         public bool FullName = true;
 
         public string GetValue(LogInfoContext context)

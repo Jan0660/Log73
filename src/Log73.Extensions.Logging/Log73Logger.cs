@@ -10,7 +10,7 @@ namespace Log73.Extensions.Logging
         /// <summary>
         /// The configuration for this <see cref="Log73Logger"/>.
         /// </summary>
-        private readonly Log73LoggerConfiguration Config;
+        public Log73LoggerConfiguration Config { get; set; }
         /// <summary>
         /// The name for this logger.
         /// </summary>
@@ -32,6 +32,11 @@ namespace Log73.Extensions.Logging
                 });
         }
 
+        /// <summary>
+        /// If the message should be logged under the current configuration's <see cref="Log73.LogLevel"/>.
+        /// </summary>
+        /// <param name="logLevel"></param>
+        /// <returns></returns>
         public bool IsEnabled(MLogLevel logLevel)
         {
             if (logLevel == MLogLevel.None)
@@ -41,6 +46,7 @@ namespace Log73.Extensions.Logging
             return false;
         }
 
+        /// <inheritdoc cref="ILogger.BeginScope"/>
         public IDisposable BeginScope<TState>(TState state)
             => default;
     }

@@ -178,16 +178,19 @@ namespace Log73
         public static (int Left, int Top) GetCursorPosition()
             => (SConsole.CursorLeft, SConsole.CursorTop);
 
+        /// <inheritdoc cref="System.Console.SetIn"/>
         public static void SetIn(TextReader textReader)
         {
             In = textReader ?? throw new ArgumentNullException(nameof(textReader));
         }
 
+        /// <inheritdoc cref="System.Console.SetOut"/>
         public static void SetOut(TextWriter textWriter)
         {
             Out = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
         }
 
+        /// <inheritdoc cref="System.Console.SetError"/>
         public static void SetError(TextWriter textWriter)
         {
             Err = textWriter ?? throw new ArgumentNullException(nameof(textWriter));

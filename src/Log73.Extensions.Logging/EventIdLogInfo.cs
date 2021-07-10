@@ -7,10 +7,18 @@ namespace Log73.Extensions.Logging
     /// </summary>
     public class EventIdLogInfo : ILogInfo
     {
+        /// <summary>
+        /// The style to apply to the string returned by <see cref="GetValue"/> and the brackets.
+        /// </summary>
         public ConsoleStyleOption Style { get; set; } = new()
         {
             Color = Color.Blue
         };
+        /// <summary>
+        /// Get the string for the LogInfo.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
         public string GetValue(LogInfoContext context)
         {
             if (context is LoggerLogInfoContext ctx)

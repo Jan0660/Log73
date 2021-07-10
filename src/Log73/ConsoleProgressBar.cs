@@ -18,12 +18,11 @@ namespace Log73
             // how much we expect the braces and counts to take up
             var bloatSize = 5 + (max.ToString().Length * 2);
             var availableForBlocks = width - bloatSize;
-            //var grab = pain(current, max, availableForBlocks);
             var grab = (int) (current / (double) max * availableForBlocks);
             // get blocks
-            var blocks = "";
-            blocks += RepeatChar(FilledCharacter, grab);
-            blocks += RepeatChar(EmptyCharacter, availableForBlocks - grab);
+            var blocks = new StringBuilder();
+            blocks.Append(RepeatChar(FilledCharacter, grab));
+            blocks.Append(RepeatChar(EmptyCharacter, availableForBlocks - grab));
             var currentCountPadding = RepeatChar(' ', max.ToString().Length - current.ToString().Length);
             Console.AtBottomLog("[" + currentCountPadding + current + "/" + max + "]" + "[" + blocks + "]", true);
         }

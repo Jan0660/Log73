@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using Styles = Log73.ConsoleStyleOptions;
+
 namespace Log73
 {
     /// <summary>
@@ -11,30 +10,35 @@ namespace Log73
     public static class MessageTypes
     {
         private static ConsoleStyleOptions Styles => new();
+
         public static MessageType Info = new()
         {
             LogType = LogType.Info,
             Name = "Info",
             Style = Styles.Info
         };
+
         public static MessageType Start = new()
         {
             LogType = LogType.Info,
             Name = "Start",
             Style = Styles.Info
         };
+
         public static MessageType Done = new()
         {
             LogType = LogType.Info,
             Name = "Done",
             Style = new() { Color = Color.Lime }
         };
+
         public static MessageType Warn = new()
         {
             LogType = LogType.Warn,
             Name = "Warn",
             Style = Styles.Warn
         };
+
         public static MessageType Error = new()
         {
             LogType = LogType.Error,
@@ -42,6 +46,7 @@ namespace Log73
             Style = Styles.Error,
             WriteToStdErr = true
         };
+
         public static MessageType Debug = new()
         {
             LogType = LogType.Debug,
@@ -68,7 +73,7 @@ namespace Log73
         /// </summary>
         /// <returns><see cref="Info"/>, <see cref="Warn"/>, <see cref="Error"/>, <see cref="Debug"/>, <see cref="Start"/> and <see cref="Done"/> in an array, in this order.</returns>
         public static MessageType[] AsArray()
-            => new []{ Info, Warn, Error, Debug, Start, Done };
+            => new[] { Info, Warn, Error, Debug, Start, Done };
     }
 
     /// <summary>
@@ -81,6 +86,7 @@ namespace Log73
         public ConsoleStyleOption Style = new();
         public List<ILogInfo> LogInfos = new();
         public bool WriteToStdErr = false;
+
         /// <summary>
         /// The style to be used for the content of the message
         /// </summary>

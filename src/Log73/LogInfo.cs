@@ -1,6 +1,4 @@
-﻿
-
-namespace Log73
+﻿namespace Log73
 {
     public interface ILogInfo
     {
@@ -17,7 +15,5 @@ namespace Log73
         
         public string ValueString { get; internal set; }
         public MessageType MessageType { get; internal set; }
-
-        public LogInfoContext() { }
     }
 }

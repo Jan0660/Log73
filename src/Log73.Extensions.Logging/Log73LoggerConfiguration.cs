@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using MLogLevel = Microsoft.Extensions.Logging.LogLevel;
+﻿using MLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Log73.Extensions.Logging
 {
@@ -47,7 +45,7 @@ namespace Log73.Extensions.Logging
                 MLogLevel.Warning => Warning,
                 MLogLevel.Information => Information,
                 MLogLevel.Debug => Debug,
-                MLogLevel.Trace => Trace
+                MLogLevel.Trace => Trace,
             };
         
         

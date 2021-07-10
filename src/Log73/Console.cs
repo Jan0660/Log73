@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using SConsole = System.Console;
-using System.Threading.Tasks;
-using System.IO;
-using Log73.ExtensionMethod;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 using Log73.Extensible;
+using Log73.ExtensionMethod;
+using SConsole = System.Console;
 
 namespace Log73
 {
@@ -18,6 +18,9 @@ namespace Log73
         Debug = 8
     }
 
+    /// <summary>
+    /// The Log73 console.
+    /// </summary>
     public static partial class Console
     {
         private static bool _lock = false;
@@ -25,11 +28,23 @@ namespace Log73
         private static BlockingCollection<(MessageType msgType, object value, LogInfoContext context)>
             _logQueue = new();
 
-        private static TextWriter Out = SConsole.Out;
-        private static TextWriter Err = SConsole.Error;
-        private static TextReader In = SConsole.In;
+        /// <summary>
+        /// Set to <see cref="System.Console.Out"/> by default.
+        /// </summary>
+        public static TextWriter Out { get; set; } = SConsole.Out;
+        /// <summary>
+        /// Set to <see cref="System.Console.Error"/> by default.
+        /// </summary>
+        public static TextWriter Err { get; set; } = SConsole.Error;
+        /// <summary>
+        /// Set to <see cref="System.Console.In"/> by default.
+        /// </summary>
+        public static TextReader In { get; set; } = SConsole.In;
         private static string _lastKeepMessage = null;
         public static ConsoleOptions Options = new ConsoleOptions();
+        /// <summary>
+        /// The type for object serialization extension methods for logging.
+        /// </summary>
         public static readonly ConsoleLogObject Object = new();
 
         /// <summary>
@@ -126,7 +141,7 @@ namespace Log73
             {
             }
 
-            task.ContinueWith((task, state) =>
+            task.ContinueWith((task, _) =>
             {
                 if (task.IsFaulted)
                 {
@@ -226,15 +241,14 @@ namespace Log73
 
         private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
         {
-            str = Options.UseBrackets ? $"[{str}]" : str;
-            var stri = GetStyled(str, style);
+            var stri = GetStyled(Options.UseBrackets ? $"[{str}]" : str, style);
             if (Options.SpaceAfterInfo)
                 stri += ' ';
             return stri;
         }
 
         /// <summary>
-        /// Writes a string to <see cref="StdOut"/> with color using <see cref="System.Console.ForegroundColor"/> and <see cref="System.Console.BackgroundColor"/>
+        /// Writes a string to <see cref="Out"/> with color using <see cref="System.Console.ForegroundColor"/> and <see cref="System.Console.BackgroundColor"/>
         /// </summary>
         /// <param name="str"></param>
         /// <param name="style"></param>
@@ -303,6 +317,10 @@ namespace Log73
                 writer.Write(" ");
         }
 
+        /// <summary>
+        /// Logs an exception with <see cref="MessageTypes.Error"/> with it's StackTrace if it isn't null.
+        /// </summary>
+        /// <param name="exception"></param>
         public static void Exception(Exception exception)
         {
             Log(MessageTypes.Error, $@"An exception has occurred: {exception.Message}"

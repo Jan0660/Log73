@@ -1,38 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
-using System.Text;
 using Log73.ColorSchemes;
 
 namespace Log73
 {
     /// <summary>
-    /// Class to store the Ansi codes required for styling, all of the properties return <see cref="String.Empty"/> if <see cref="ConsoleOptions.UseAnsi"/> is <see langword="false"/>.
+    /// Class to store the Ansi codes required for styling, all of the properties return <see cref="string.Empty"/> if <see cref="ConsoleOptions.UseAnsi"/> is <see langword="false"/>.
     /// Mostly derived from the "ANSI escape code" page on wikipedia.org.
     /// </summary>
     // https://en.wikipedia.org/wiki/ANSI_escape_code
     public static class Ansi
     {
-        private static bool en => Console.Options.UseAnsi;
-        public static string normal => en ? "\u001b[0m" : "";
-        public static string Bold => en ? "\u001b[1m" : "";
-        public static string BoldOff => en ? "\u001b[21m" : "";
-        public static string NormalColor => en ? "\u001b[22m" : "";
-        public static string Faint => en ? "\u001b[2m" : "";
-        public static string Underline => en ? "\u001b[4m" : "";
-        public static string UnderlineOff => en ? "\u001b[24m" : "";
-        public static string Italic => en ? "\u001b[3m" : "";
-        public static string NotItalic => en ? "\u001b[23m" : "";
-        public static string SlowBlink => en ? "\u001b[5m" : "";
-        public static string RapidBlink => en ? "\u001b[6m" : "";
-        public static string BlinkOff => en ? "\u001b[25m" : "";
-        public static string Invert => en ? "\u001b[7m" : "";
-        public static string InvertOff => en ? "\u001b[27m" : "";
-        public static string CrossedOut => en ? "\u001b[9m" : "";
-        public static string CrossedOutOff => en ? "\u001b[9m" : "";
-        public static string DefaultForegroundColor => en ? "\u001b[39m" : "";
-        public static string DefaultBackgroundColor => en ? "\u001b[49m" : "";
+        private static bool Enabled => Console.Options.UseAnsi;
+
+        /// <summary>
+        /// Disable all ANSI effects.
+        /// </summary>
+        public static string Normal => Enabled ? "\u001b[0m" : "";
+
+        public static string Bold => Enabled ? "\u001b[1m" : "";
+        public static string BoldOff => Enabled ? "\u001b[21m" : "";
+        public static string NormalColor => Enabled ? "\u001b[22m" : "";
+        public static string Faint => Enabled ? "\u001b[2m" : "";
+        public static string Underline => Enabled ? "\u001b[4m" : "";
+        public static string UnderlineOff => Enabled ? "\u001b[24m" : "";
+        public static string Italic => Enabled ? "\u001b[3m" : "";
+        public static string NotItalic => Enabled ? "\u001b[23m" : "";
+        public static string SlowBlink => Enabled ? "\u001b[5m" : "";
+        public static string RapidBlink => Enabled ? "\u001b[6m" : "";
+        public static string BlinkOff => Enabled ? "\u001b[25m" : "";
+        public static string Invert => Enabled ? "\u001b[7m" : "";
+        public static string InvertOff => Enabled ? "\u001b[27m" : "";
+        public static string CrossedOut => Enabled ? "\u001b[9m" : "";
+        public static string CrossedOutOff => Enabled ? "\u001b[9m" : "";
+        public static string DefaultForegroundColor => Enabled ? "\u001b[39m" : "";
+        public static string DefaultBackgroundColor => Enabled ? "\u001b[49m" : "";
 
         public static string ForegroundColor(string str, Color color)
             => $"\x1b[38;2;{color.R};{color.G};{color.B}m{str}{DefaultForegroundColor}";
@@ -41,15 +44,16 @@ namespace Log73
             => $"\x1b[48;2;{color.R};{color.G};{color.B}m{str}{DefaultBackgroundColor}";
 
         public static string ApplyColor(string str, Color? foregroundColor, Color? backgroundColor,
-            bool Enable24BitColor)
+            bool enable24BitColor)
         {
-            if (Enable24BitColor)
+            if (enable24BitColor)
             {
                 if (foregroundColor != null)
                     str = ForegroundColor(str, foregroundColor.Value);
                 if (backgroundColor != null)
                     str = BackgroundColor(str, backgroundColor.Value);
             }
+
             return str;
         }
 
@@ -79,8 +83,8 @@ namespace Log73
             byte g = input.G;
             byte b = input.B;
             Vector4 aways;
-            int BestAway = 2949000;
-            Color BestMatch = Color.Black;
+            int bestAway = 2949000;
+            Color bestMatch = Color.Black;
             foreach (Color color in colors)
             {
                 aways = new Vector4(a - color.A, r - color.R, g - color.G, b - color.B);
@@ -92,14 +96,15 @@ namespace Log73
                     aways.Z *= -1;
                 if (aways.W < 0)
                     aways.W *= -1;
-                int awaysSum = (int) (aways.X + aways.Y + aways.Z + aways.W);
-                if (awaysSum < BestAway)
+                int awaysSum = (int)(aways.X + aways.Y + aways.Z + aways.W);
+                if (awaysSum < bestAway)
                 {
-                    BestAway = awaysSum;
-                    BestMatch = color;
+                    bestAway = awaysSum;
+                    bestMatch = color;
                 }
             }
-            return BestMatch;
+
+            return bestMatch;
         }
 
         public static ConsoleColor ColorToConsoleColor(Color color, IColorScheme colorScheme)

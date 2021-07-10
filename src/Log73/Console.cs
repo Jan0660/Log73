@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using SConsole = System.Console;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.IO;
 using Log73.ExtensionMethod;
 using System.Diagnostics;
@@ -21,7 +21,10 @@ namespace Log73
     public static partial class Console
     {
         private static bool _lock = false;
-        private static List<(MessageType msgType, object value, LogInfoContext context)> _logQueue = new();
+
+        private static BlockingCollection<(MessageType msgType, object value, LogInfoContext context)>
+            _logQueue = new();
+
         private static TextWriter Out = SConsole.Out;
         private static TextWriter Err = SConsole.Error;
         private static TextReader In = SConsole.In;
@@ -146,11 +149,7 @@ namespace Log73
             // a message is currently being logged, add it to the log queue
             if (_lock == true)
             {
-                lock (_logQueue)
-                {
-                    _logQueue.Add((msgType, value, context));
-                }
-
+                _logQueue.Add((msgType, value, context));
                 return;
             }
 
@@ -163,19 +162,10 @@ namespace Log73
 
         public static void _handleLogQueue()
         {
-            lock (_logQueue)
+            // log all of the messages in log queue
+            while (_logQueue.TryTake(out var msg))
             {
-                // log all of the messages in log queue and remove them after they're logged
-                if (_logQueue.Count == 0)
-                    return;
-                while (true)
-                {
-                    var msg = _logQueue[0];
-                    _log(msg.msgType, msg.value, msg.context);
-                    _logQueue.RemoveAt(0);
-                    if (_logQueue.Count == 0)
-                        return;
-                }
+                _log(msg.msgType, msg.value, msg.context);
             }
         }
 

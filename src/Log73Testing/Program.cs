@@ -7,7 +7,7 @@ using Log73.ColorSchemes;
 using Log73.ExtensionMethod;
 using Log73.Extensions.Logging;
 using Log73.Extensions.NewtonsoftJson;
-using Log73.Extensions.YamlDotNet;
+using Log73.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

@@ -7,9 +7,8 @@ namespace Log73
 {
     /// <summary>
     /// Class to store the Ansi codes required for styling, all of the properties return <see cref="string.Empty"/> if <see cref="ConsoleOptions.UseAnsi"/> is <see langword="false"/>.
-    /// Mostly derived from the "ANSI escape code" page on wikipedia.org.
+    /// Mostly derived from https://en.wikipedia.org/wiki/ANSI_escape_code.
     /// </summary>
-    // https://en.wikipedia.org/wiki/ANSI_escape_code
     public static class Ansi
     {
         private static bool Enabled => Console.Options.UseAnsi;

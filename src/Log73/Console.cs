@@ -42,10 +42,10 @@ namespace Log73
         public static TextReader In { get; set; } = SConsole.In;
         private static string _lastKeepMessage = null;
         public static ConsoleOptions Options = new ConsoleOptions();
-        /// <summary>
-        /// The type for object serialization extension methods for logging.
-        /// </summary>
+        /// <inheritdoc cref="Log73.Extensible.ConsoleLogObject"/>
         public static readonly ConsoleLogObject Object = new();
+        /// <inheritdoc cref="Log73.Extensible.ConsoleConfigureObject"/>
+        public static readonly ConsoleLogObject Configure = new();
 
         /// <summary>
         /// Keeps <paramref name="str"/> at the bottom of your console.

@@ -5,7 +5,11 @@ namespace Log73
     /// </summary>
     public class ToStringSerializer : IObjectSerializer
     {
-        /// <inheritdoc cref="IObjectSerializer.Serialize"/>
+        /// <summary>
+        /// Returns the ToString() of the object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>The output of ToString().</returns>
         public string Serialize(object obj)
             => obj.ToString();
     }

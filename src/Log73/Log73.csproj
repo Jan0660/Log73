@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../../Log73.targets"/>
+    <Import Project="../../Log73.targets" />
     <PropertyGroup>
         <AssemblyName>Log73</AssemblyName>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Numerics.Vectors" Version="4.5.0"/>
+        <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     </ItemGroup>
 
 </Project>

@@ -5,6 +5,9 @@ using System.Threading;
 
 namespace Log73
 {
+    /// <summary>
+    /// <see cref="ILogInfo"/> for the current time. Default format is hh:mm:ss.
+    /// </summary>
     public class TimeLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.Gold };
@@ -21,6 +24,9 @@ namespace Log73
             => $"{DateTime.Now.ToString(TimeFormat)}";
     }
 
+    /// <summary>
+    /// <see cref="ILogInfo"/> for the name of the calling method.
+    /// </summary>
     public class CallingMethodLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
@@ -65,6 +71,9 @@ namespace Log73
         }
     }
 
+    /// <summary>
+    /// <see cref="ILogInfo"/> for the name of the calling method's class.
+    /// </summary>
     public class CallingClassLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
@@ -85,6 +94,9 @@ namespace Log73
         }
     }
 
+    /// <summary>
+    /// <see cref="ILogInfo"/> for the name of the calling method's module.
+    /// </summary>
     public class CallingModuleLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
@@ -105,6 +117,9 @@ namespace Log73
         }
     }
 
+    /// <summary>
+    /// <see cref="ILogInfo"/> for the name of the current <see cref="Thread"/>.
+    /// </summary>
     public class ThreadLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
@@ -125,6 +140,9 @@ namespace Log73
         }
     }
 
+    /// <summary>
+    /// <see cref="ILogInfo"/> for the logged object's type.
+    /// </summary>
     public class TypeLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };

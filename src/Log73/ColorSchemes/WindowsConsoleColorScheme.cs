@@ -2,6 +2,9 @@
 
 namespace Log73.ColorSchemes
 {
+    /// <summary>
+    /// Color scheme for the Windows console.
+    /// </summary>
     public class WindowsConsoleColorScheme : IColorScheme
     {
         public Color Black { get; set; } = Color.FromArgb(0,0,0);

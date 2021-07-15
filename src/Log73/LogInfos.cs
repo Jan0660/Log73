@@ -30,6 +30,10 @@ namespace Log73
     public class CallingMethodLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+
+        /// <summary>
+        /// For example: If true, returns "Log73.TypeLogInfo.GetValue". If false, returns "GetValue"
+        /// </summary>
         public bool FullName = true;
         public string UnableToGet = "Unable to get method";
 
@@ -77,6 +81,10 @@ namespace Log73
     public class CallingClassLogInfo : ILogInfo
     {
         public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+
+        /// <summary>
+        /// For example: If true, returns "Log73.TypeLogInfo". If false, returns "TypeLogInfo"
+        /// </summary>
         public bool FullName = true;
         public string UnableToGet = "Unable to get class";
 
@@ -118,7 +126,7 @@ namespace Log73
     }
 
     /// <summary>
-    /// <see cref="ILogInfo"/> for the name of the current <see cref="Thread"/>.
+    /// <see cref="ILogInfo"/> for the name of the current <see cref="System.Threading.Thread"/>.
     /// </summary>
     public class ThreadLogInfo : ILogInfo
     {

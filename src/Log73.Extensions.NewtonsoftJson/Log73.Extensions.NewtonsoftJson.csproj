@@ -4,6 +4,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9.0</LangVersion>
+        <Description>Newtonsoft.Json serialization for Log73.</Description>
     </PropertyGroup>
 
     <ItemGroup>

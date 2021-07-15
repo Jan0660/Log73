@@ -5,9 +5,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>9.0</LangVersion>
         <Description>A powerful and customizable logging library for .NET</Description>
-        <PackageReleaseNotes>Add keeping message at bottom of console using Console.AtBottomLog
-            Add a simple progress bar using Console.AtBottomLog: ConsoleProgressBar
-            Companion package for ASP.NET logging: Log73.Extensions.Logging
+        <PackageReleaseNotes>Object serialization is now done through seperate packages, code cleanup.
         </PackageReleaseNotes>
     </PropertyGroup>
 

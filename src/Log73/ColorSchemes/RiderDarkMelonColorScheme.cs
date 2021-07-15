@@ -2,6 +2,9 @@
 
 namespace Log73.ColorSchemes
 {
+    /// <summary>
+    /// Color scheme for JetBrains' Rider Melon Dark.
+    /// </summary>
     public class RiderDarkMelonColorScheme : IColorScheme
     {
         public Color Black { get; set; } = Color.FromArgb(189,189,189);

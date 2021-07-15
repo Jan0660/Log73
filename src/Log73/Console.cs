@@ -45,7 +45,7 @@ namespace Log73
         /// <inheritdoc cref="Log73.Extensible.ConsoleLogObject"/>
         public static readonly ConsoleLogObject Object = new();
         /// <inheritdoc cref="Log73.Extensible.ConsoleConfigureObject"/>
-        public static readonly ConsoleLogObject Configure = new();
+        public static readonly ConsoleConfigureObject Configure = new();
 
         /// <summary>
         /// Keeps <paramref name="str"/> at the bottom of your console.
@@ -175,7 +175,7 @@ namespace Log73
             _lock = false;
         }
 
-        public static void _handleLogQueue()
+        private static void _handleLogQueue()
         {
             // log all of the messages in log queue
             while (_logQueue.TryTake(out var msg))

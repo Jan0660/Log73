@@ -9,7 +9,8 @@
 
 ```csharp
 using Console = Log73.Console;
-using Log73;
+using Log73;  
+using Log73.Extensions;
 
 Console.Options.LogLevel = LogLevel.Debug;
 Console.Log("You can");
@@ -17,20 +18,22 @@ MessageTypes.Error.Style.Invert = true;
 MessageTypes.Error.LogInfos.Add(new TimeExtraInfo());
 Console.Error("log customized messages");
 Console.Warn("with Log73!");
-Console.ObjectYaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
+Console.Object.Yaml(new { AndAlso = "Log objects as Json, Xml or Yaml!" });
 ```
 
 ![output](https://i.imgur.com/AI3b8Lk.png)
+Unfinished DocFX documentation for latest master branch commit now available at [log73.jan0660.dev](https://log73.jan0660.dev/api/Log73.html).
 
 # Table of contents
 
 1. [Using Ansi](#ansi)
-2. [LogTypes and LogLevels](#logtypes-and-loglevels)
-3. [Styling](#styling)
-4. [Message Types](#message-types)
-5. [LogInfos](#loginfos)
-6. [Progress Bars](#progress-bars)
-6. [Use with ASP.NET](#use-with-aspnet)
+1. [LogTypes and LogLevels](#logtypes-and-loglevels)
+1. [Styling](#styling)
+1. [Message Types](#message-types)
+1. [LogInfos](#loginfos)
+2. [Object Serialization](#object-serialization)
+3. [Progress Bars](#progress-bars)
+4. [Use with ASP.NET](#use-with-aspnet)
 
 ## Ansi
 
@@ -155,6 +158,22 @@ They can also be styled using the `Style` property. Log73 comes with the followi
 
 \* When used in async or anonymous method scenarios they have problem getting the stack frame and will appear as `Unable to get <>` when they cannot do so.
 
+# Object Serialization
+To not clutter up the main package with dependencies, object serialization was moved to seperate packages:
+ - [`Log73.Extensions.NewtonsoftJson`](https://www.nuget.org/packages/Log73.Extensions.NewtonsoftJson) - JSON with [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+ - [`Log73.Extensions.YamlDotNet`](https://www.nuget.org/packages/Log73.Extensions.YamlDotNet) - YAML with [YamlDotNet](https://github.com/aaubry/YamlDotNet)
+
+Extension methods a provided in the `Log73.Extensions` namespace:
+```csharp
+using Log73.Extensions;
+using Console = Log73.Console;
+// Log73.Extensions.NewtonsoftJson
+Console.Configure.UseNewtonsoftJson();
+Console.Object.Json(new {text: "hey"});
+// Log73.Extensions.YamlDotNet
+Console.Configure.UseYamlDotNet();
+Console.Object.Yaml(new {text: "hey"});
+```
 # Progress Bars
 Another thing Log73 can do is write text and keep it at the bottom of your console, which can be used for progress bars!
 ```csharp

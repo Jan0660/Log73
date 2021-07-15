@@ -40,7 +40,7 @@ namespace Log73Testing
         {
             //Console.Info("Info");
             //Console.Warn("Warn");
-            Console.Options.ObjectSerializer = new NewtonsoftJsonSerializer();
+            Console.Configure.UseNewtonsoftJson();
             Console.Options.UseAnsi = false;
             Console.Options.SeparateLogInfoWriteCalls = true;
             Console.Options.ColorScheme = new RiderDarkMelonColorScheme();

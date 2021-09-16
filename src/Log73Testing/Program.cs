@@ -41,8 +41,8 @@ namespace Log73Testing
             //Console.Info("Info");
             //Console.Warn("Warn");
             Console.Configure.UseNewtonsoftJson();
-            Console.Options.UseAnsi = false;
-            Console.Options.SeparateLogInfoWriteCalls = true;
+            // Console.Options.UseAnsi = false;
+            // Console.Options.SeparateLogInfoWriteCalls = true;
             Console.Options.ColorScheme = new RiderDarkMelonColorScheme();
             SomeOtherMethod();
             Console.Options.ObjectSerializer = new ToStringSerializer();
@@ -97,7 +97,7 @@ namespace Log73Testing
         {
             Console.Error("No styles :(");
             MessageTypes.Error.Style.Invert = true;
-            MessageTypes.Error.ContentStyle.Color = System.Drawing.Color.Orange;
+            MessageTypes.Error.ContentStyle.ForegroundColor = System.Drawing.Color.Orange;
             MessageTypes.Error.ContentStyle.Italic = true;
             MessageTypes.Error.ContentStyle.Underline = true;
             Console.Error("Look at all this styling!");
@@ -112,7 +112,7 @@ namespace Log73Testing
             MessageTypes.Debug.LogInfos.Add(new TypeLogInfo());
             MessageTypes.Debug.LogInfos.Add(new NullLogInfo());
             MessageTypes.Debug.LogInfos.Add(new CallingClassLogInfo()
-                {Style = new() {Color = System.Drawing.Color.LightPink}});
+                {Style = new() {ForegroundColor = System.Drawing.Color.LightPink}});
             Console.Debug("Hello");
         }
 
@@ -122,8 +122,6 @@ namespace Log73Testing
             Console.Info(new DummyObject());
             Console.Info("Object serialization as JSON");
             Console.Object.Json(new DummyObject());
-            Console.Info("Object serialization as XML");
-            Console.ObjectXml(new DummyObject());
             Console.Info("Object serialization as YAML");
             Console.Object.Yaml(new DummyObject());
         }
@@ -164,7 +162,7 @@ namespace Log73Testing
 
         public class NullLogInfo : ILogInfo
         {
-            public ConsoleStyleOption Style { get; set; } = new ConsoleStyleOption();
+            public Log73Style Style { get; set; } = new Log73Style();
 
             public string GetValue(LogInfoContext context)
                 => null;

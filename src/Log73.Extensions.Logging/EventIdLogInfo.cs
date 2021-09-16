@@ -10,9 +10,9 @@ namespace Log73.Extensions.Logging
         /// <summary>
         /// The style to apply to the string returned by <see cref="GetValue"/> and the brackets.
         /// </summary>
-        public ConsoleStyleOption Style { get; set; } = new()
+        public Log73Style Style { get; set; } = new()
         {
-            Color = Color.Blue
+            ForegroundColor = Color.Blue
         };
         /// <summary>
         /// Get the string for the LogInfo.

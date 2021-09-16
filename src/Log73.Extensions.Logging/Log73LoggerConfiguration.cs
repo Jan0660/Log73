@@ -55,7 +55,7 @@ namespace Log73.Extensions.Logging
         public MessageType[] MessageTypesAsArray()
             => new []{ Critical, Error, Warning, Information, Debug, Trace };
 
-        private static MessageType _createMessageType(string name, ConsoleStyleOption style, bool writeToStdErr = false)
+        private static MessageType _createMessageType(string name, Log73Style style, bool writeToStdErr = false)
             => new()
             {
                 Name = name,

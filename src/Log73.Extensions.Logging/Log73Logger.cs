@@ -11,6 +11,7 @@ namespace Log73.Extensions.Logging
         /// The configuration for this <see cref="Log73Logger"/>.
         /// </summary>
         public Log73LoggerConfiguration Config { get; set; }
+
         /// <summary>
         /// The name for this logger.
         /// </summary>
@@ -41,12 +42,12 @@ namespace Log73.Extensions.Logging
         {
             if (logLevel == MLogLevel.None)
                 return false;
-            if ((int) logLevel >= (int) Config.LogLevel)
+            if ((int)logLevel >= (int)Config.LogLevel)
                 return true;
             return false;
         }
 
-        /// <inheritdoc cref="ILogger.BeginScope"/>
+        /// <inheritdoc/>
         public IDisposable BeginScope<TState>(TState state)
             => default;
     }

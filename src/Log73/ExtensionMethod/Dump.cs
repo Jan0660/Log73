@@ -5,7 +5,7 @@ namespace Log73.ExtensionMethod
     public static class DumpExtensionMethods
     {
         /// <summary>
-        /// Logs the object to console using the <see cref="LogType"/> specified in <see cref="ConsoleOptions.DumpLogType"/>.
+        /// Logs the object to console using the <see cref="LogType"/> specified in <see cref="Log73Options.DumpLogType"/>.
         /// </summary>
         public static void Dump(this object obj)
             => Console.Log(Console.Options.DumpMessageType, obj);

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Log73.Extensible;
-using Log73.ExtensionMethod;
 using SConsole = System.Console;
 
 namespace Log73
@@ -41,7 +40,7 @@ namespace Log73
         /// </summary>
         public static TextReader In { get; set; } = SConsole.In;
         private static string _lastKeepMessage = null;
-        public static ConsoleOptions Options = new ConsoleOptions();
+        public static Log73Options Options = new Log73Options();
         /// <inheritdoc cref="Log73.Extensible.ConsoleLogObject"/>
         public static readonly ConsoleLogObject Object = new();
         /// <inheritdoc cref="Log73.Extensible.ConsoleConfigureObject"/>
@@ -106,26 +105,11 @@ namespace Log73
         public static void Debug(object value)
             => Log(MessageTypes.Debug, value);
 
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as XML using the <see cref="MessageTypes.Info"/> <see cref="MessageType"/>.
-        /// </summary>
-        public static void ObjectXml(object obj)
-            => ObjectXml(MessageTypes.Info, obj);
-
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as XML using the matching <see cref="MessageType"/> for the <paramref name="logType"/>.
-        /// </summary>
-        public static void ObjectXml(LogType logType, object obj)
-            => ObjectXml(MessageTypes.Get(logType), obj);
-
-        /// <summary>
-        /// Logs the <paramref name="obj"/> serialized as XML using the specified <see cref="MessageType"/>.
-        /// </summary>
-        public static void ObjectXml(MessageType msgType, object obj)
-            => Log(msgType, obj.SerializeAsXml());
-
         #endregion
 
+        /// <summary>
+        /// Log a <see cref="System.Threading.Tasks.Task"/>'s start and failing or finishing.
+        /// </summary>
         public static void Task(string name, Task task)
         {
             var stopwatch = Stopwatch.StartNew();
@@ -206,7 +190,7 @@ namespace Log73
             if (msgType.Name != null)
             {
                 var logTypeString = $"{(msgType.Style.ToUpper ? msgType.Name.ToUpper() : msgType.Name)}";
-                if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
+                if (!Options.UseAnsi | Options.SeparateLogInfoWriteCalls)
                     _writeInfo(logTypeString, msgType.Style, outStream);
                 else
                     entireMessage += _getStyledAsLogInfo(logTypeString, msgType.Style);
@@ -222,7 +206,7 @@ namespace Log73
                 var val = extra.GetValue(context);
                 if (val == null)
                     continue;
-                if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
+                if (!Options.UseAnsi | Options.SeparateLogInfoWriteCalls)
                     _writeInfo(val, extra.Style, outStream);
                 else
                 {
@@ -231,17 +215,17 @@ namespace Log73
             }
 
             // write the actual message
-            if (!Options.Use24BitAnsi | Options.SeparateLogInfoWriteCalls)
+            if (!Options.UseAnsi | Options.SeparateLogInfoWriteCalls)
                 _writeStyle($"{serialized}\n", msgType.ContentStyle, outStream);
             else
-                outStream.Write(GetStyled($"{entireMessage}{serialized}\n", msgType.ContentStyle));
+                outStream.Write(entireMessage + msgType.ContentStyle.Style($"{serialized}\n", Options));
             if (_lastKeepMessage != null)
                 outStream.WriteLine(_lastKeepMessage);
         }
 
-        private static string _getStyledAsLogInfo(string str, ConsoleStyleOption style)
+        private static string _getStyledAsLogInfo(string str, Log73Style style)
         {
-            var stri = GetStyled(Options.UseBrackets ? $"[{str}]" : str, style);
+            var stri = style.Style(Options.UseBrackets ? $"[{str}]" : str, Options);
             if (Options.SpaceAfterInfo)
                 stri += ' ';
             return stri;
@@ -252,13 +236,13 @@ namespace Log73
         /// </summary>
         /// <param name="str"></param>
         /// <param name="style"></param>
-        private static void _writeBasicColored(string str, ConsoleStyleOption style, TextWriter writer)
+        private static void _writeBasicColored(string str, Log73Style style, TextWriter writer)
         {
             var prevForegroundColor = SConsole.ForegroundColor;
             var prevBackgroundColor = SConsole.BackgroundColor;
-            if (style.Color != null)
+            if (style.ForegroundColor != null)
             {
-                var match = Ansi.BestMatch(style.Color.Value, Options.ColorScheme);
+                var match = Ansi.BestMatch(style.ForegroundColor.Value, Options.ColorScheme);
                 var con = Ansi.ColorToConsoleColor(match, Options.ColorScheme);
                 SConsole.ForegroundColor = con;
             }
@@ -275,41 +259,16 @@ namespace Log73
             SConsole.BackgroundColor = prevBackgroundColor;
         }
 
-        private static void _writeStyle(object value, ConsoleStyleOption style, TextWriter writer)
+        private static void _writeStyle(object value, Log73Style style, TextWriter writer)
         {
             var str = value.ToString();
-            if (Options.Use24BitAnsi)
-                writer.Write(GetStyled(str, style));
-            if (!Options.Use24BitAnsi)
-            {
-                _writeBasicColored(GetStyled(str, style), style, writer);
-            }
+            if (Options.UseAnsi)
+                writer.Write(style.Style(str, Options));
+            if (!Options.UseAnsi)
+                _writeBasicColored(str, style, writer);
         }
 
-        public static string GetStyled(string str, ConsoleStyleOption style)
-        {
-            if (style.Bold)
-                str = Ansi.Bold + str + Ansi.BoldOff;
-            if (style.Italic)
-                str = Ansi.Italic + str + Ansi.NotItalic;
-            if (style.Underline)
-                str = Ansi.Underline + str + Ansi.UnderlineOff;
-            if (style.Invert)
-                str = Ansi.Invert + str + Ansi.InvertOff;
-            if (style.CrossedOut)
-                str = Ansi.CrossedOut + str + Ansi.CrossedOutOff;
-            if (style.SlowBlink)
-                str = Ansi.SlowBlink + str + Ansi.BlinkOff;
-            if (style.RapidBlink)
-                str = Ansi.RapidBlink + str + Ansi.BlinkOff;
-            if (style.Faint)
-                str = Ansi.Faint + str + Ansi.NormalColor;
-            if (Options.Use24BitAnsi)
-                str = Ansi.ApplyColor(str, style.Color, style.BackgroundColor, Options.Use24BitAnsi);
-            return str;
-        }
-
-        private static void _writeInfo(object value, ConsoleStyleOption style, TextWriter writer)
+        private static void _writeInfo(object value, Log73Style style, TextWriter writer)
         {
             var str = Options.UseBrackets ? $"[{value}]" : $"{value}";
             _writeStyle(str, style, writer);
@@ -339,8 +298,8 @@ namespace Log73
             finished(stopwatch.ElapsedMilliseconds);
         }
 
-        public static void SetCursorPosition((int, int) position)
-            => SetCursorPosition(position.Item1, position.Item2);
+        public static void SetCursorPosition((int left, int top) position)
+            => SetCursorPosition(position.left, position.top);
 
         public static void ClearLastLine()
         {
@@ -349,7 +308,7 @@ namespace Log73
                 str += " ";
             Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
             Console.Write(str);
-            Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
+            Console.SetCursorPosition(0, Console.GetCursorPosition().Top);
         }
 
         private static string SerializeObject(this object obj)

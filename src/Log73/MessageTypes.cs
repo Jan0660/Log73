@@ -1,49 +1,46 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Styles = Log73.ConsoleStyleOptions;
 
 namespace Log73
 {
     /// <summary>
     /// Stores the default <see cref="MessageType"/>s included with Log73.
     /// </summary>
-    public static class MessageTypes
+    public class MessageTypes
     {
-        private static ConsoleStyleOptions Styles => new();
-
         public static MessageType Info = new()
         {
             LogType = LogType.Info,
             Name = "Info",
-            Style = Styles.Info
+            Style = new() { ForegroundColor = Color.Cyan }
         };
 
         public static MessageType Start = new()
         {
             LogType = LogType.Info,
             Name = "Start",
-            Style = Styles.Info
+            Style = new() { ForegroundColor = Color.Cyan }
         };
 
         public static MessageType Done = new()
         {
             LogType = LogType.Info,
             Name = "Done",
-            Style = new() { Color = Color.Lime }
+            Style = new() { ForegroundColor = Color.Lime }
         };
 
         public static MessageType Warn = new()
         {
             LogType = LogType.Warn,
             Name = "Warn",
-            Style = Styles.Warn
+            Style = new() { ForegroundColor = Color.Yellow }
         };
 
         public static MessageType Error = new()
         {
             LogType = LogType.Error,
             Name = "Error",
-            Style = Styles.Error,
+            Style = new() { ForegroundColor = Color.Red },
             WriteToStdErr = true
         };
 
@@ -51,7 +48,7 @@ namespace Log73
         {
             LogType = LogType.Debug,
             Name = "Debug",
-            Style = Styles.Debug
+            Style = new() { ForegroundColor = Color.White }
         };
 
         /// <summary>
@@ -77,19 +74,19 @@ namespace Log73
     }
 
     /// <summary>
-    /// Class to store the information on how to log a message like it's <see cref="Log73.LogType"/> and <see cref="ConsoleStyleOption" />s.
+    /// Class to store the information on how to log a message like it's <see cref="Log73.LogType"/> and <see cref="Log73Style" />s.
     /// </summary>
     public class MessageType
     {
         public LogType LogType = LogType.Info;
         public string Name;
-        public ConsoleStyleOption Style = new();
+        public Log73Style Style = new();
         public List<ILogInfo> LogInfos = new();
         public bool WriteToStdErr = false;
 
         /// <summary>
         /// The style to be used for the content of the message
         /// </summary>
-        public ConsoleStyleOption ContentStyle = new();
+        public Log73Style ContentStyle = new();
     }
 }

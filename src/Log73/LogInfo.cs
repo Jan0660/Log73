@@ -2,7 +2,7 @@
 {
     public interface ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; }
+        public Log73Style Style { get; set; }
         public string GetValue(LogInfoContext context);
     }
 

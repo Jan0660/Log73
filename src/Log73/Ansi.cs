@@ -6,7 +6,7 @@ using Log73.ColorSchemes;
 namespace Log73
 {
     /// <summary>
-    /// Class to store the Ansi codes required for styling, all of the properties return <see cref="string.Empty"/> if <see cref="ConsoleOptions.UseAnsi"/> is <see langword="false"/>.
+    /// Class to store the Ansi codes required for styling, all of the properties return <see cref="string.Empty"/> if <see cref="Log73Options.UseAnsi"/> is <see langword="false"/>.
     /// Mostly derived from https://en.wikipedia.org/wiki/ANSI_escape_code.
     /// </summary>
     public static class Ansi
@@ -36,29 +36,31 @@ namespace Log73
         public static string DefaultForegroundColor => Enabled ? "\u001b[39m" : "";
         public static string DefaultBackgroundColor => Enabled ? "\u001b[49m" : "";
 
+        /// <summary>
+        /// Add ANSI foreground color to text.
+        /// </summary>
         public static string ForegroundColor(string str, Color color)
             => $"\x1b[38;2;{color.R};{color.G};{color.B}m{str}{DefaultForegroundColor}";
 
+        /// <summary>
+        /// Add ANSI background color to text.
+        /// </summary>
         public static string BackgroundColor(string str, Color color)
             => $"\x1b[48;2;{color.R};{color.G};{color.B}m{str}{DefaultBackgroundColor}";
 
-        public static string ApplyColor(string str, Color? foregroundColor, Color? backgroundColor,
-            bool enable24BitColor)
+        public static string ApplyColor(string str, Color? foregroundColor, Color? backgroundColor)
         {
-            if (enable24BitColor)
-            {
-                if (foregroundColor != null)
-                    str = ForegroundColor(str, foregroundColor.Value);
-                if (backgroundColor != null)
-                    str = BackgroundColor(str, backgroundColor.Value);
-            }
+            if (foregroundColor != null)
+                str = ForegroundColor(str, foregroundColor.Value);
+            if (backgroundColor != null)
+                str = BackgroundColor(str, backgroundColor.Value);
 
             return str;
         }
 
         public static Color BestMatch(Color input, IColorScheme colorScheme)
         {
-            Color[] colors = new[]
+            Color[] colors =
             {
                 colorScheme.Black,
                 colorScheme.Blue,

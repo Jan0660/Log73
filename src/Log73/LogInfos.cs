@@ -10,7 +10,7 @@ namespace Log73
     /// </summary>
     public class TimeLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.Gold };
+        public Log73Style Style { get; set; } = new() { ForegroundColor = Color.Gold };
 
         public string TimeFormat = "hh:mm:ss";
 
@@ -29,7 +29,7 @@ namespace Log73
     /// </summary>
     public class CallingMethodLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public Log73Style Style { get; set; } = new() { ForegroundColor = Color.HotPink };
 
         /// <summary>
         /// For example: If true, returns "Log73.TypeLogInfo.GetValue". If false, returns "GetValue"
@@ -80,7 +80,7 @@ namespace Log73
     /// </summary>
     public class CallingClassLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public Log73Style Style { get; set; } = new() { ForegroundColor = Color.HotPink };
 
         /// <summary>
         /// For example: If true, returns "Log73.TypeLogInfo". If false, returns "TypeLogInfo"
@@ -107,7 +107,7 @@ namespace Log73
     /// </summary>
     public class CallingModuleLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public Log73Style Style { get; set; } = new() { ForegroundColor = Color.HotPink };
         public bool FullName = false;
         public string UnableToGet = "Unable to get module";
 
@@ -130,7 +130,7 @@ namespace Log73
     /// </summary>
     public class ThreadLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public Log73Style Style { get; set; } = new() { ForegroundColor = Color.HotPink };
         public bool Attributes = true;
 
         public string GetValue(LogInfoContext context)
@@ -153,7 +153,7 @@ namespace Log73
     /// </summary>
     public class TypeLogInfo : ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new() { Color = Color.HotPink };
+        public Log73Style Style { get; set; } = new() { ForegroundColor = Color.HotPink };
 
         /// <summary>
         /// For example: If true, returns "Log73.TypeLogInfo". If false, returns "TypeLogInfo"

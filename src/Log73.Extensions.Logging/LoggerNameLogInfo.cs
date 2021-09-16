@@ -7,9 +7,9 @@ namespace Log73.Extensions.Logging
     /// </summary>
     public class LoggerNameLogInfo: ILogInfo
     {
-        public ConsoleStyleOption Style { get; set; } = new()
+        public Log73Style Style { get; set; } = new()
         {
-            Color = Color.DarkCyan
+            ForegroundColor = Color.DarkCyan
         };
         public string GetValue(LogInfoContext context)
         {

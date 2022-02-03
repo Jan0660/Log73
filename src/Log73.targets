@@ -1,0 +1,14 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <VersionPrefix>0.8.0</VersionPrefix>
+        <VersionSuffix>preview1</VersionSuffix>
+        <LangVersion>latest</LangVersion>
+        <Authors>Jan0660</Authors>
+        <PackageTags>logging console log73 log</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/Jan0660/Log73</RepositoryUrl>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+</Project>

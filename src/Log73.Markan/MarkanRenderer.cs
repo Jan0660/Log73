@@ -43,8 +43,7 @@ public static class MarkanRenderer
                 if (i + toMatch.Length > input.Length)
                     return false;
                 // check if the next n chars are the same and if not escaped by a \
-                // todo: substring here might be allocating, try with span
-                if (input[i..(i + toMatch.Length)] == toMatch && (i != 0 ? input[i - 1] != '\\' : true))
+                if (input.AsSpan()[i..(i + toMatch.Length)].SequenceEqual(toMatch) && (i != 0 ? input[i - 1] != '\\' : true))
                 {
                     i += toMatch.Length - 1;
                     return true;

@@ -5,8 +5,10 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Description>A powerfully customizable logging library for .NET</Description>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Log73\Log73.csproj"/>
+    </ItemGroup>
 
 </Project>

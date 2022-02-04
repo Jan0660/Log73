@@ -2,7 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73", "src\Log73\Log73.csproj", "{1B859D68-F087-4917-9C63-F11712F5445F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markan", "src\Log73.Markan\Log73.Markan.csproj", "{A04E3B23-0ED4-4818-9266-0108B8150FAD}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\Test\Test.csproj", "{383828A6-2CD2-497D-9BA6-161A396A1408}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Tests", "Log73.Tests\Log73.Tests.csproj", "{46593A42-BF46-4103-B5C0-71F5055961AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +22,13 @@ Global
 		{383828A6-2CD2-497D-9BA6-161A396A1408}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{383828A6-2CD2-497D-9BA6-161A396A1408}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{383828A6-2CD2-497D-9BA6-161A396A1408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A04E3B23-0ED4-4818-9266-0108B8150FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A04E3B23-0ED4-4818-9266-0108B8150FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A04E3B23-0ED4-4818-9266-0108B8150FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A04E3B23-0ED4-4818-9266-0108B8150FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46593A42-BF46-4103-B5C0-71F5055961AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46593A42-BF46-4103-B5C0-71F5055961AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46593A42-BF46-4103-B5C0-71F5055961AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46593A42-BF46-4103-B5C0-71F5055961AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

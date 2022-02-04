@@ -8,8 +8,7 @@ public class AnsiCodes
     public const string Reset = "\u001b[0m";
 
     public const string Bold = "\u001b[1m";
-    public const string BoldOff = "\u001b[21m";
-    public const string NormalColor = "\u001b[22m";
+    public const string NormalIntensity = "\u001b[22m";
     public const string Faint = "\u001b[2m";
     public const string Underline = "\u001b[4m";
     public const string UnderlineOff = "\u001b[24m";
@@ -20,8 +19,8 @@ public class AnsiCodes
     public const string BlinkOff = "\u001b[25m";
     public const string Invert = "\u001b[7m";
     public const string InvertOff = "\u001b[27m";
-    public const string CrossedOut = "\u001b[9m";
-    public const string CrossedOutOff = "\u001b[9m";
+    public const string Strikethrough = "\u001b[9m";
+    public const string StrikethroughOff = "\u001b[29m";
     public const string DefaultForegroundColor = "\u001b[39m";
     public const string DefaultBackgroundColor = "\u001b[49m";
 }

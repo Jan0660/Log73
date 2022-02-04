@@ -27,7 +27,7 @@ public class Style
         if (Invert)
             builder.Append(AnsiCodes.Invert);
         if (CrossedOut)
-            builder.Append(AnsiCodes.CrossedOut);
+            builder.Append(AnsiCodes.Strikethrough);
         if (SlowBlink)
             builder.Append(AnsiCodes.SlowBlink);
         if (RapidBlink)

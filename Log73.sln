@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markan", "src\Log73.Markan\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\Test\Test.csproj", "{383828A6-2CD2-497D-9BA6-161A396A1408}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Tests", "Log73.Tests\Log73.Tests.csproj", "{46593A42-BF46-4103-B5C0-71F5055961AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log73.Tests", "src\Log73.Tests\Log73.Tests.csproj", "{46593A42-BF46-4103-B5C0-71F5055961AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

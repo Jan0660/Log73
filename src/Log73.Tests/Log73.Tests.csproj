@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Log73.Markan\Log73.Markan.csproj" />
+      <ProjectReference Include="..\Log73.Markan\Log73.Markan.csproj" />
     </ItemGroup>
 
 </Project>

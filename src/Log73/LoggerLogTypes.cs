@@ -6,7 +6,7 @@ namespace Log73;
 public class LoggerLogTypes
 {
     // todo: some kind of DefaultInstance for LogTypeLogPre
-    public LogType? Info = new("Info", LogLevel.Info)
+    public LogType Info = new("Info", LogLevel.Info)
     {
         LogPreStyle = new()
         {
@@ -15,7 +15,7 @@ public class LoggerLogTypes
         LogPres = new() { new LogTypeLogPre() },
     };
 
-    public LogType? Error = new("Error", LogLevel.Error)
+    public LogType Error = new("Error", LogLevel.Error)
     {
         LogPreStyle = new()
         {
@@ -25,7 +25,7 @@ public class LoggerLogTypes
         LogPres = new() { new LogTypeLogPre() },
     };
 
-    public LogType? Warn = new("Warn", LogLevel.Warn)
+    public LogType Warn = new("Warn", LogLevel.Warn)
     {
         LogPreStyle = new()
         {
@@ -34,7 +34,7 @@ public class LoggerLogTypes
         LogPres = new() { new LogTypeLogPre() },
     };
 
-    public LogType? Debug = new("Debug", LogLevel.Debug)
+    public LogType Debug = new("Debug", LogLevel.Debug)
     {
         LogPreStyle = new()
         {
@@ -49,12 +49,11 @@ public class LoggerLogTypes
     {
         foreach (var logType in TraditionalsAsSpan())
         {
-            if (logType == null) continue;
             logType.LogPres ??= new();
             logType.LogPres.Add(logpre);
         }
     }
 
-    public LogType?[] TraditionalsAsArray() => new[] { Info, Error, Warn, Debug };
-    public ReadOnlySpan<LogType?> TraditionalsAsSpan() => new[] { Info, Error, Warn, Debug };
+    public LogType[] TraditionalsAsArray() => new[] { Info, Error, Warn, Debug };
+    public ReadOnlySpan<LogType> TraditionalsAsSpan() => new[] { Info, Error, Warn, Debug };
 }

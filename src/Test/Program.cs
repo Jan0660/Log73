@@ -1,4 +1,6 @@
 ﻿global using Console = Log73.Console;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 using Log73;
 using Log73.LogPres;
 using Log73.Markan;
@@ -21,14 +23,14 @@ Console.WriteLine();
 void WithStyle(string text, Style style)
     => Console.Logger.PreWrite(text, new LogType { ContentStyle = style });
 
-WithStyle("Bold", new() { Bold = true });
-WithStyle("Faint", new() { Faint = true });
-WithStyle("Italic", new() { Italic = true });
-WithStyle("Underline", new() { Underline = true });
-WithStyle("SlowBlink", new() { SlowBlink = true });
-WithStyle("RapidBlink", new() { RapidBlink = true });
-WithStyle("Invert", new() { Invert = true });
-WithStyle("CrossedOut", new() { CrossedOut = true });
+WithStyle("Bold", new() { AnsiStyle = AnsiStyle.Bold});
+WithStyle("Faint", new() { AnsiStyle = AnsiStyle.Faint });
+WithStyle("Italic", new() { AnsiStyle = AnsiStyle.Italic });
+WithStyle("Underline", new() { AnsiStyle = AnsiStyle.Underline });
+WithStyle("SlowBlink", new() { AnsiStyle = AnsiStyle.SlowBlink });
+WithStyle("RapidBlink", new() { AnsiStyle = AnsiStyle.RapidBlink });
+WithStyle("Invert", new() { AnsiStyle = AnsiStyle.Invert });
+WithStyle("CrossedOut", new() { AnsiStyle = AnsiStyle.Strikethrough });
 
 Console.WriteLine();
 

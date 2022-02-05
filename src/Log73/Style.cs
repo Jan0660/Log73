@@ -2,37 +2,42 @@
 
 namespace Log73;
 
+[Flags]
+public enum AnsiStyle : byte
+{
+    Bold = 0b0000_0001,
+    Faint = 0b0000_0010,
+    Italic = 0b0000_0100,
+    Underline = 0b0000_1000,
+    Invert = 0b0001_0000,
+    Strikethrough = 0b0010_0000,
+    SlowBlink = 0b0100_0000,
+    RapidBlink = 0b1000_0000,
+}
+
 public class Style
 {
     public Color? ForegroundColor { get; set; }
     public Color? BackgroundColor { get; set; }
-    // todo: can probably store these in a bitfield/flag enum for memory efficiency
-    public bool Bold { get; set; }
-    public bool Italic { get; set; }
-    public bool Underline { get; set; }
-    public bool Invert { get; set; }
-    public bool CrossedOut { get; set; }
-    public bool SlowBlink { get; set; }
-    public bool RapidBlink { get; set; }
-    public bool Faint { get; set; }
+    public AnsiStyle AnsiStyle { get; set; }
 
     private void WriteBeforeStyle(ref SpanStringBuilder builder)
     {
-        if (Bold)
+        if (AnsiStyle.HasFlag(AnsiStyle.Bold))
             builder.Append(AnsiCodes.Bold);
-        if (Italic)
+        if (AnsiStyle.HasFlag(AnsiStyle.Italic))
             builder.Append(AnsiCodes.Italic);
-        if (Underline)
+        if (AnsiStyle.HasFlag(AnsiStyle.Underline))
             builder.Append(AnsiCodes.Underline);
-        if (Invert)
+        if (AnsiStyle.HasFlag(AnsiStyle.Invert))
             builder.Append(AnsiCodes.Invert);
-        if (CrossedOut)
+        if (AnsiStyle.HasFlag(AnsiStyle.Strikethrough))
             builder.Append(AnsiCodes.Strikethrough);
-        if (SlowBlink)
+        if (AnsiStyle.HasFlag(AnsiStyle.SlowBlink))
             builder.Append(AnsiCodes.SlowBlink);
-        if (RapidBlink)
+        if (AnsiStyle.HasFlag(AnsiStyle.RapidBlink))
             builder.Append(AnsiCodes.RapidBlink);
-        if (Faint)
+        if (AnsiStyle.HasFlag(AnsiStyle.Faint))
             builder.Append(AnsiCodes.Faint);
         if(ForegroundColor.HasValue)
             builder.ForegroundColor(ForegroundColor.Value);

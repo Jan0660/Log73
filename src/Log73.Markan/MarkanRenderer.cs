@@ -4,6 +4,15 @@ using static Log73.Markan.MarkanRenderer.Trilean;
 
 namespace Log73.Markan;
 
+[Flags]
+internal enum Token : byte
+{
+    Italic = 0b_0000_0001,
+    Bold = 0b_0000_0010,
+    Underline = 0b_0000_0100,
+    Strikethrough = 0b_0000_1000,
+}
+
 public static class MarkanRenderer
 {
     private static readonly ReadOnlyDictionary<Token, string> TokenValues = new(new Dictionary<Token, string>
@@ -14,13 +23,6 @@ public static class MarkanRenderer
         [Token.Strikethrough] = "~~",
     });
 
-    internal enum Token : byte
-    {
-        Italic = 0b_0000_0001,
-        Bold = 0b_0000_0010,
-        Underline = 0b_0000_0100,
-        Strikethrough = 0b_0000_1000,
-    }
 
     internal enum Trilean : byte
     {
@@ -32,8 +34,7 @@ public static class MarkanRenderer
     public static string Render(string input)
     {
         var builder = new StringBuilder();
-        // todo: substitute this with a wrap of a Span<>?
-        var inside = new List<Token>(TokenValues.Count);
+        Token inside = 0;
         for (var i = 0; i < input.Length; i++)
         {
             var ch = input[i];
@@ -57,13 +58,13 @@ public static class MarkanRenderer
             {
                 var toMatch = TokenValues[token];
                 if (!IsMatchStr(toMatch)) return False;
-                if (inside.Contains(token))
+                if (inside.HasFlag(token))
                 {
-                    inside.Remove(token);
+                    inside ^= token;
                     return Neither;
                 }
 
-                inside.Add(token);
+                inside |= token;
                 return True;
             }
 

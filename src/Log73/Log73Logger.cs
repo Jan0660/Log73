@@ -3,7 +3,7 @@ using SConsole = System.Console;
 
 namespace Log73;
 
-public class Log73Logger
+public partial class Log73Logger
 {
     /// <summary>
     /// Set to <see cref="System.Console.Out"/> by default.
@@ -37,53 +37,21 @@ public class Log73Logger
     public bool DefaultLogFilter(LogType? logType)
         => (byte)(logType?.LogLevel ?? LogLevel.Info) >= (byte)Options.LogLevel;
 
-    #region log thingy
 
     // todo: make ReadOnlySpan<char> overloads for these methods
     // todo: some kind of serialization stuff like in v1
-    public void WriteLine(object? value)
-        => PreWrite(value?.ToString(), LogTypes.WriteLine);
-
-    public void WriteLine(string? value)
-        => PreWrite(value, LogTypes.WriteLine);
-
     public void WriteLine()
         => PreWrite(null, LogTypes.WriteLine);
 
-    public void Info(object? value)
-        => PreWrite(value?.ToString(), LogTypes.Info);
 
-    public void Info(string? value)
-        => PreWrite(value, LogTypes.Info);
-
-    public void Warn(object? value)
-        => PreWrite(value?.ToString(), LogTypes.Warn);
-
-    public void Warn(string? value)
-        => PreWrite(value, LogTypes.Warn);
-
-    public void Error(object? value)
-        => PreWrite(value?.ToString(), LogTypes.Error);
-
-    public void Error(string? value)
-        => PreWrite(value, LogTypes.Error);
-
-    public void Debug(object? value)
-        => PreWrite(value?.ToString(), LogTypes.Debug);
-
-    public void Debug(string? value)
-        => PreWrite(value, LogTypes.Debug);
-
-    #endregion
-
-    public void PreWrite(string? value, LogType? logType, bool isWriteLine = true, object? extraContext = null)
+    public void PreWrite(in ReadOnlySpan<char> value, LogType? logType, bool isWriteLine = true, object? extraContext = null)
     {
         if (!LogFilter(logType))
             return;
         LogFunction(new LogContext()
         {
             LogType = logType,
-            Message = value.AsSpan(),
+            Message = value,
             IsWriteLine = isWriteLine,
             ExtraContext = extraContext,
         });

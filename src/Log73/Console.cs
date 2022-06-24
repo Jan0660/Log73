@@ -44,51 +44,7 @@ public static partial class Console
 
     #endregion
 
-    #region Logger methods pass-through
-
-    /// <inheritdoc cref="Log73Logger.WriteLine(object)"/>
-    public static void WriteLine(object? value)
-        => Logger.WriteLine(value?.ToString());
-
-    /// <inheritdoc cref="Log73Logger.WriteLine(string)"/>
-    public static void WriteLine(string? value)
-        => Logger.WriteLine(value);
-
     /// <inheritdoc cref="Log73Logger.WriteLine()"/>
     public static void WriteLine()
         => Logger.WriteLine(null);
-
-    /// <inheritdoc cref="Log73Logger.Info(object)"/>
-    public static void Info(object? value)
-        => Logger.Info(value);
-
-    /// <inheritdoc cref="Log73Logger.Info(string)"/>
-    public static void Info(string? value)
-        => Logger.Info(value);
-
-    /// <inheritdoc cref="Log73Logger.Warn(object)"/>
-    public static void Warn(object? value)
-        => Logger.Warn(value);
-
-    /// <inheritdoc cref="Log73Logger.Warn(string)"/>
-    public static void Warn(string? value)
-        => Logger.Warn(value);
-
-    /// <inheritdoc cref="Log73Logger.Error(object)"/>
-    public static void Error(object? value)
-        => Logger.Error(value);
-
-    /// <inheritdoc cref="Log73Logger.Error(string)"/>
-    public static void Error(string? value)
-        => Logger.Error(value);
-
-    /// <inheritdoc cref="Log73Logger.Debug(object)"/>
-    public static void Debug(object? value)
-        => Logger.Debug(value);
-
-    /// <inheritdoc cref="Log73Logger.Debug(string)"/>
-    public static void Debug(string? value)
-        => Logger.Debug(value);
-
-    #endregion
 }
